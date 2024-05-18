@@ -16,13 +16,6 @@ In this assignment, you will be extending this design to be a 5 stage pipeline i
 You will also be implementing full forwarding for ALU instructions and hazard detection.
 The simple in-order CPU design is based closely on the CPU model in Patterson and Hennessey's Computer Organization and Design.
 
-## Updating the DINO CPU code
-
-The DINO CPU code must be updated before you can run each lab.
-You should read up on [how to update your code](../documentation/updating-from-git.md) to get the assignment 3 template from GitHub.
-
-You can check out the main branch to get the template code for this lab.
-If you want to use your solution from lab2 as a starting point, you can merge your commits with the `origin` main by running `git pull` or `git fetch; git merge origin/main`.
 
 ## GitHub Codespaces / CSIF machines
 
