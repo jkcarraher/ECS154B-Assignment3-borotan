@@ -22,18 +22,30 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Control signals used in EX stage
   class EXControl extends Bundle {
+    val aluop             = UInt(3.W)
+    val op1_src           = UInt(1.W)
+    val op2_src           = UInt(2.W)
+    val controltransferop = UInt(2.W)
   }
 
   // Control signals used in MEM stage
   class MControl extends Bundle {
+    val memop             = UInt(2.W)
   }
 
   // Control signals used in WB stage
   class WBControl extends Bundle {
+    val writeback_valid   = UInt(1.W)
+    val writeback_src     = UInt(2.W)
   }
 
   // Data of the the register between ID and EX stages
   class IDEXBundle extends Bundle {
+    val pc          = UInt(64.W)
+    val instruction = UInt(32.W)
+    val sextImm     = UInt(64.W)
+    val readdata1   = UInt(64.W)
+    val readdata2   = UInt(64.W)
   }
 
   // Control block of the IDEX register
@@ -45,6 +57,12 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Everything in the register between EX and MEM stages
   class EXMEMBundle extends Bundle {
+    val writedata     = UInt(64.W)
+    val result        = UInt(64.W)
+    val sextImm       = UInt(64.W)
+    val instruction   = UInt(32.W)
+    val nextpc       = UInt(64.W)
+    val taken         = UInt(1.W)
   }
 
   // Control block of the EXMEM register
@@ -55,6 +73,10 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Everything in the register between MEM and WB stages
   class MEMWBBundle extends Bundle {
+    val instruction   = UInt(32.W)
+    val readdata      = UInt(64.W)
+    val result        = UInt(64.W)
+    val sextImm       = UInt(64.W)
   }
 
   // Control block of the MEMWB register
@@ -121,6 +143,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Update the PC:
   // (Part I) Choose between PC+4 and nextpc from the ControlTransferUnit to update PC
+  pc := ex_mem.io.nextpc
   // (Part III) Only update PC when pcstall is false
 
   // Send the PC to the instruction memory port to get the instruction
@@ -147,7 +170,8 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   // Send opcode to control
 
   // Grab rs1 and rs2 from the instruction in this stage
-
+  registers.io.readreg1 := instruction(19, 15)
+  registers.io.readreg2 := instruction(24, 20)
   // (Part III and/or Part IV) Send inputs from this stage to the hazard detection unit
 
   // Send rs1 and rs2 to the register file
