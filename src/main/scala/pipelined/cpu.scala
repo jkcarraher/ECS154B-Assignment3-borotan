@@ -135,7 +135,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // From memory back to fetch. Since we don't decide whether to take a branch or not until the memory stage.
   val next_pc = Wire(UInt(64.W))
-  //next_pc := DontCare // Remove when connected
+  next_pc := DontCare // Remove when connected
 
   /////////////////////////////////////////////////////////////////////////////
   // FETCH STAGE
@@ -143,27 +143,29 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Update the PC:
   // (Part I) Choose between PC+4 and nextpc from the ControlTransferUnit to update PC
+  pc = ex_mem.io.data.nextpc
+  
 
   //INPUTS TO PC
-  when (hazard.io.pcfromtaken === false.B){
-    //hazard == 0
-    when (hazard.io.pcStall === false.B){
-      //pcStall == 0
-      pc = pcPlusFour.io.result
-    } .otherwise {
-      //pcStall == 1
-      pc = pc
-    }
-  } .otherwise {
-    // hazard == 1
-    when (hazard.io.pcStall){
-      // pcStall == 0
-      pc := next_pc
-    } .otherwise {
-      // pcStall == 1
-      pc := pc
-    }
-  }
+  // when (hazard.io.pcfromtaken === false.B){
+  //   //hazard == 0
+  //   when (hazard.io.pcStall === false.B){
+  //     //pcStall == 0
+  //     pc = pcPlusFour.io.result
+  //   } .otherwise {
+  //     //pcStall == 1
+  //     pc = pc
+  //   }
+  // } .otherwise {
+  //   // hazard == 1
+  //   when (hazard.io.pcStall){
+  //     // pcStall == 0
+  //     pc := next_pc
+  //   } .otherwise {
+  //     // pcStall == 1
+  //     pc := pc
+  //   }
+  // }
 
   // (Part III) Only update PC when pcstall is false
 
