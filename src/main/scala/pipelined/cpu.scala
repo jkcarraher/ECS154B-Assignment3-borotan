@@ -143,7 +143,22 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Update the PC:
   // (Part I) Choose between PC+4 and nextpc from the ControlTransferUnit to update PC
-  pc := ex_mem.io.nextpc
+  when (hazard.pcfromtaken === 0.U){
+    //hazard == 0
+    when (){
+      
+    } .otherwise {
+
+    }
+    pc := ex_mem.io.nextpc
+  } .otherwise {
+    // hazard == 1
+    when (){
+
+    } .otherwise {
+
+    }
+  }
   // (Part III) Only update PC when pcstall is false
 
   // Send the PC to the instruction memory port to get the instruction

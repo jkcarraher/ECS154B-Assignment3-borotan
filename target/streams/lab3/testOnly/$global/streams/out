@@ -1,0 +1,12 @@
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(dinocpu.RTypeTesterLab3, org.scalatest.tools.Framework$$anon$1@356f3e5c, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mSummary for ScalaCheck not available.[0m
+[0m[[0m[0minfo[0m] [0m[0mScalaTest[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 51 seconds, 123 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 100[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 1, aborted 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 16, failed 84, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m*** 84 TESTS FAILED ***[0m[0m
+[0m[[0m[31merror[0m] [0m[0mFailed: Total 100, Failed 84, Errors 0, Passed 16[0m
+[0m[[0m[31merror[0m] [0m[0mFailed tests:[0m
+[0m[[0m[31merror[0m] [0m[0m	dinocpu.RTypeTesterLab3[0m
+[0m[[0m[31merror[0m] [0m[0m(Lab3 / [31mtestOnly[0m) sbt.TestsFailedException: Tests unsuccessful[0m
