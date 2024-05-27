@@ -287,22 +287,22 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Connect the ALU data wires
   val op1_mux = Wire(UInt(64.W))
-  when (id_ex.io.data.ex_ctrl.op1_src == 0.U) {
+  when (id_ex_ctrl.io.data.ex_ctrl.op1_src == 0.U) {
     op1_mux := operand1_mux
   } .otherwise {
     op1_mux := id_ex.io.data.pc
   }
-  alu.io.op1 := op1_mux
+  alu.io.operand1 := op1_mux
 
   val op2_mux = Wire(UInt(64.W))
-  when (id_ex.io.data.ex_ctrl.op2_src == 0.U) {
+  when (id_ex_ctrl.io.data.ex_ctrl.op2_src == 0.U) {
     op2_mux := operand2_mux
-  } .elsewhen(id_ex.io.data.ex_ctrl.op2_src == 1.U){
+  } .elsewhen(id_ex_ctrl.io.data.ex_ctrl.op2_src == 1.U){
     op2_mux := 4.U
   } .otherwise {
     op2_mux := ex_mem.io.data.sextImm
   }
-  alu.io.op2 := op2_mux
+  alu.io.operand2 := op2_mux
 
   // Connect the ControlTransfer data wires
 
