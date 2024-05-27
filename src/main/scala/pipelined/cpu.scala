@@ -262,10 +262,8 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   } .elsewhen (forwarding.io.forwardA === 1.U) {
     operand1_mux := memForward_mux
   } .otherwise {
-    operand1_mux := registers.io.writedata
+    operand1_mux := writedata_mux
   }
-
-  controlTransfer.io.operand1 := operand1_mux
 
   // (Skip for Part I) Insert the forward operand2 mux
 
@@ -277,10 +275,8 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   } .elsewhen (forwarding.io.forwardB === 1.U) {
     operand2_mux := memForward_mux
   } .otherwise {
-    operand2_mux := registers.io.writedata
+    operand2_mux := writedata_mux
   }
-  
-  controlTransfer.io.operand2 := operand2_mux
 
   // Set the ALU operation
   alu.io.operation := aluControl.io.operation
@@ -319,13 +315,11 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   ex_mem_ctrl.io.data.wb_ctrl.writeback_valid := id_ex_ctrl.io.data.wb_ctrl.writeback_valid
   ex_mem_ctrl.io.data.wb_ctrl.writeback_src := id_ex_ctrl.io.data.wb_ctrl.writeback_src
 
-
-
   // (Part III and/or Part IV) Set the control signals on the EX_MEM pipeline register
   ex_mem.io.valid      := true.B
-  ex_mem.io.flush      := false.B
+  ex_mem.io.flush      := hazard.io.ex_mem_flush
   ex_mem_ctrl.io.valid := true.B
-  ex_mem_ctrl.io.flush := false.B
+  ex_mem_ctrl.io.flush := hazard.io.ex_mem_flush
 
   /////////////////////////////////////////////////////////////////////////////
   // MEM STAGE
@@ -383,13 +377,15 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   }
 
   // Write the data to the register file
+  val writedata_mux = Wire(UInt(64.W))
   when (mem_wb_ctrl.io.data.wb_ctrl.writeback_src === 0.U) {
-    registers.io.writedata := mem_wb.io.data.result
+    writedata_mux := mem_wb.io.data.result
   }.elsewhen (mem_wb_ctrl.io.data.wb_ctrl.writeback_src === 1.U) {
-    registers.io.writedata := mem_wb.io.data.sextImm
+    writedata_mux := mem_wb.io.data.sextImm
   }.elsewhen (mem_wb_ctrl.io.data.wb_ctrl.writeback_src === 2.U) {
-    registers.io.writedata := mem_wb.io.data.readdata
+    writedata_mux := mem_wb.io.data.readdata
   }
+  registers.io.writedata := writedata_mux
 
   // (Skip for Part I) Set the input signals for the forwarding unit
   forwarding.io.memwbrd := mem_wb.io.data.instruction(11,7)
