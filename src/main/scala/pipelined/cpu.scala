@@ -287,7 +287,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Connect the ALU data wires
   val op1_mux = Wire(UInt(64.W))
-  when (id_ex_ctrl.io.data.ex_ctrl.op1_src == 0.U) {
+  when (id_ex_ctrl.io.data.ex_ctrl.op1_src === 0.U) {
     op1_mux := operand1_mux
   } .otherwise {
     op1_mux := id_ex.io.data.pc
@@ -295,9 +295,9 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   alu.io.operand1 := op1_mux
 
   val op2_mux = Wire(UInt(64.W))
-  when (id_ex_ctrl.io.data.ex_ctrl.op2_src == 0.U) {
+  when (id_ex_ctrl.io.data.ex_ctrl.op2_src === 0.U) {
     op2_mux := operand2_mux
-  } .elsewhen(id_ex_ctrl.io.data.ex_ctrl.op2_src == 1.U){
+  } .elsewhen(id_ex_ctrl.io.data.ex_ctrl.op2_src === 1.U){
     op2_mux := 4.U
   } .otherwise {
     op2_mux := ex_mem.io.data.sextImm
@@ -313,11 +313,11 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   ex_mem_ctrl.io.data.taken := controlTransfer.io.taken
 
   //  - Set the memory control singals
-  ex_mem.io.data.mem_ctrl.memop := id_ex.io.data.mem_ctrl.memop
+  ex_mem_ctrl.io.data.mem_ctrl.memop := id_ex_ctrl.io.data.mem_ctrl.memop
 
   //  - Set the writeback control signals
-  ex_mem_ctrl.io.data.wb_ctrl.writeback_valid := id_ex.io.data.wb_ctrl.writeback_valid
-  ex_mem_ctrl.io.data.wb_ctrl.writeback_src := id_ex.io.data.wb_ctrl.writeback_src
+  ex_mem_ctrl.io.data.wb_ctrl.writeback_valid := id_ex_ctrl.io.data.wb_ctrl.writeback_valid
+  ex_mem_ctrl.io.data.wb_ctrl.writeback_src := id_ex_ctrl.io.data.wb_ctrl.writeback_src
 
 
 
@@ -376,7 +376,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   registers.io.writereg := mem_wb.io.data.instruction(11,7)
 
   // Set the writeback data mux
-  when (mem_wb.io.data.instruction(11,7) == 0.U) {
+  when (mem_wb.io.data.instruction(11,7) === 0.U) {
     registers.io.wen := false.B
   }.otherwise {
     registers.io.wen := mem_wb_ctrl.io.data.wb_ctrl.writeback_valid
