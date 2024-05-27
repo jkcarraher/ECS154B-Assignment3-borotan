@@ -145,7 +145,6 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   // (Part I) Choose between PC+4 and nextpc from the ControlTransferUnit to update PC
   pc = ex_mem.io.data.nextpc
   
-
   //INPUTS TO PC
   // when (hazard.io.pcfromtaken === false.B){
   //   //hazard == 0
@@ -223,8 +222,12 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   // (Skip for Part I) Set the inputs to the forwarding unit from this stage
 
   // Connect the ALU Control wires
+  aluControl.io.aluop := id_ex_ctrl.io.data.ex_ctrl.aluop
+  aluControl.io.funct3 := id_ex.io.data.instruction(14,12)
+  aluControl.io.funct7 := id_ex.io.data.instruction(31,25)
 
   // Connect the ControlTransferUnit control wire
+  controlTransfer.io.controltransferop := id_ex_ctrl.io.data.ex_ctrl.controltransferop
 
   // (Skip for Part I) Insert the mux for Selecting data to forward from the MEM stage to the EX stage
   //                   (Can send either alu result or immediate from MEM stage to EX stage)
@@ -233,9 +236,19 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // (Skip for Part I) Insert the forward operand2 mux
 
-  // Operand1 mux
+  // Operand1 mux for CONTROL TRANSFER UNIT
+  controlTransfer.io.operand1 := MuxCase(defaultValue, Seq(
+    (forwarding.io.forwardA === 0.U) -> id_ex.io.data.readdata1, 
+    (forwarding.io.forwardA === 1.U) -> exData,  
+    (forwarding.io.forwardA === 2.U) -> memData  
+  ))
 
   // Operand2 mux
+  when (){
+
+  }.otherwise{
+
+  }
 
   // Set the ALU operation
 
