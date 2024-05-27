@@ -23,7 +23,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   // Control signals used in EX stage
   class EXControl extends Bundle {
     val aluop             = UInt(3.W)
-    val op1_src           = UInt(1.W)
+    val op1_src           = Bool()
     val op2_src           = UInt(2.W)
     val controltransferop = UInt(2.W)
   }
@@ -35,7 +35,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Control signals used in WB stage
   class WBControl extends Bundle {
-    val writeback_valid   = UInt(1.W)
+    val writeback_valid   = Bool()
     val writeback_src     = UInt(2.W)
   }
 
@@ -62,7 +62,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
     val sextImm       = UInt(64.W)
     val instruction   = UInt(32.W)
     val next_pc       = UInt(64.W)
-    val taken         = UInt(1.W)
+    val taken         = Bool()
   }
 
   // Control block of the EXMEM register
@@ -124,7 +124,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   //hazard.io           := DontCare
 
   //io.dmem := DontCare
-  dontTouch(pc)
+  //dontTouch(pc)
 
   //id_ex.io       := DontCare
   //id_ex_ctrl.io  := DontCare
