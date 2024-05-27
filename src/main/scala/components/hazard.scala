@@ -48,5 +48,19 @@ class HazardUnit extends Module {
   io.if_id_flush  := false.B
 
   // Your code goes here
-
+  when (io.exmem_taken === true.B) {
+    io.pcfromtaken  := true.B
+    io.pcstall      := false.B
+    io.if_id_stall  := false.B
+    io.id_ex_flush  := true.B
+    io.ex_mem_flush := true.B
+    io.if_id_flush  := true.B
+  }.elsewhen (io.idex_memread === true.B && (idex_rd === rs1 || idex_rd === rs2)) {
+    io.pcfromtaken  := false.B
+    io.pcstall      := true.B
+    io.if_id_stall  := true.B
+    io.id_ex_flush  := true.B
+    io.ex_mem_flush := false.B
+    io.if_id_flush  := false.B
+  }
 }
