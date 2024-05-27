@@ -246,7 +246,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   //                   (Can send either alu result or immediate from MEM stage to EX stage)
   val memForward_mux = Wire(UInt(64.W))
 
-  when (ex_mem.io.data.wb_ctrl.writeback_src === 0.U) {
+  when (id_ex_ctrl.io.data.wb_ctrl.writeback_src === 0.U) {
     memForward_mux := ex_mem.io.data.result
   } .otherwise {
     memForward_mux := ex_mem.io.data.sextImm
