@@ -61,7 +61,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
     val result        = UInt(64.W)
     val sextImm       = UInt(64.W)
     val instruction   = UInt(32.W)
-    val next_pc        = UInt(64.W)
+    val next_pc       = UInt(64.W)
     val taken         = UInt(1.W)
   }
 
@@ -279,11 +279,12 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   } .otherwise {
     operand2_mux := registers.io.writedata
   }
-
+  
   controlTransfer.io.operand2 = operand2_mux
 
   // Set the ALU operation
   alu.io.operation := aluControl.io.operation
+
   // Connect the ALU data wires
   val op1_mux = Wire(UInt(64.W))
   when (id_ex.io.data.ex_ctrl.op1_src == 0.U) {
@@ -331,16 +332,34 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   /////////////////////////////////////////////////////////////////////////////
 
   // Set data memory IO
+  io.dmem.address := ex_mem.io.data.result
+  io.dmem.memread := ex_mem_ctrl.io.data.mem_ctrl.memop === 1.U
+  io.dmem.memwrite := ex_mem_ctrl.io.data.mem_ctrl.memop === 2.U
+  io.dmem.valid := ex_mem_ctrl.io.data.mem_ctrl.memop =/= 0.U
+  io.dmem.maskmode := ex_mem.io.data.instruction(13,12)
+  io.dmem.sext := ~ex_mem.io.data.instruction(14)
+  io.dmem.writedata := ex_mem.io.data.writedata
+
 
   // Send next_pc back to the Fetch stage
+  next_pc := ex_mem.io.data.next_pc
 
   // (Skip for Part I) Send input signals to the hazard detection unit
+  hazard.io.exmem_taken := ex_mem.io.data.taken
 
   // (Skip for Part I) Send input signals to the forwarding unit
+  // There are none
 
   // Sending signals from this stage to the WB stage
   //  - Fill in the MEM_WB register
+  mem_wb.io.in.instruction := ex_mem.io.data.instruction
+  mem_wb.io.in.readdata := io.dmem.readdata
+  mem_wb.io.in.result := ex_mem.io.data.result
+  mem_wb.io.in.sextImm := ex_mem.io.data.sextImm
+
   //  - Set the writeback control signals
+  mem_wb_ctrl.io.in.wb_ctrl.writeback_valid := ex_mem_ctrl.io.data.wb_ctrl.writeback_valid
+  mem_wb_ctrl.io.in.wb_ctrl.writeback_src := ex_mem_ctrl.io.data.wb_ctrl.writeback_src
 
   // Set the control signals on the MEM_WB pipeline register
   mem_wb.io.valid      := true.B
@@ -354,12 +373,27 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   /////////////////////////////////////////////////////////////////////////////
 
   // Set the register to be written to
+  registers.io.writereg := mem_wb.io.data.instruction(11,7)
 
   // Set the writeback data mux
+  when (mem_wb.io.data.instruction(11,7) == 0.U) {
+    registers.io.wen := false.B
+  }.otherwise {
+    registers.io.wen := mem_wb_ctrl.io.data.wb_ctrl.writeback_valid
+  }
 
   // Write the data to the register file
+  when (mem_wb_ctrl.io.data.wb_ctrl.writeback_src === 0.U) {
+    registers.io.writedata := mem_wb.io.data.result
+  }.elsewhen (mem_wb_ctrl.io.data.wb_ctrl.writeback_src === 1.U) {
+    registers.io.writedata := mem_wb.io.data.sextImm
+  }.elsewhen (mem_wb_ctrl.io.data.wb_ctrl.writeback_src === 2.U) {
+    registers.io.writedata := mem_wb.io.data.readdata
+  }
 
   // (Skip for Part I) Set the input signals for the forwarding unit
+  forwarding.io.memwbrd := mem_wb.io.data.instruction(11,7)
+  forwarding.io.memwbrw := mem_wb_ctrl.io.data.wb_ctrl.writeback_valid
 }
 
 /*
