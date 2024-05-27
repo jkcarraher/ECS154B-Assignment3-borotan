@@ -210,10 +210,10 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   id_ex_ctrl.io.in.ex_ctrl.op2_src := control.io.op2_src
   id_ex_ctrl.io.in.ex_ctrl.controltransferop := control.io.controltransferop
   //  - Set the memory control singals
-  id_ex_ctrl.io.in.mem_ctrl := control.io.memop
+  id_ex_ctrl.io.in.mem_ctrl.memop := control.io.memop
   //  - Set the writeback control signals
-  id_ex_ctrl.io.in.wb_ctrl := control.io.writeback_valid
-  id_ex_ctrl.io.in.wb_ctrl := control.io.writeback_src
+  id_ex_ctrl.io.in.wb_ctrl.writeback_valid := control.io.writeback_valid
+  id_ex_ctrl.io.in.wb_ctrl.writeback_src := control.io.writeback_src
 
   // (Part III and/or Part IV) Set the control signals on the ID_EX pipeline register
   id_ex.io.valid := true.B
@@ -226,11 +226,11 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   /////////////////////////////////////////////////////////////////////////////
 
   // (Skip for Part I) Set the inputs to the hazard detection unit from this stage
-  hazard.io.idex_rd := id_ex.io.data.instruction(14,12)
-  hazard.io.idex_memread := id_ex_ctrl.io.data.mem_ctrl.memop 
+  hazard.io.idex_rd := id_ex.io.data.instruction(11,7)
+  hazard.io.idex_memread := id_ex_ctrl.io.data.mem_ctrl.memop === 2.U
 
   // (Skip for Part I) Set the inputs to the forwarding unit from this stage
-  forwarding.io.rs1 := id_ex.io.data.instruction(15, 14)
+  forwarding.io.rs1 := id_ex.io.data.instruction(19, 15)
   forwarding.io.rs2 := id_ex.io.data.instruction(24, 20)
   forwarding.io.exmemrd := id_ex.io.data.instruction(11, 7)
   forwarding.io.exmemrw := id_ex_ctrl.io.data.wb_ctrl.writeback_valid
@@ -311,15 +311,19 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Sending signals from this stage to MEM stage
   //  - Fill in the EX_MEM register
-  ex_mem.io.data.next_pc := controlTransfer.io.nextpc
-  ex_mem.io.data.taken := controlTransfer.io.taken
+  ex_mem.io.in.next_pc := controlTransfer.io.nextpc
+  ex_mem.io.in.taken := controlTransfer.io.taken
+  ex_mem.io.in.instruction := id_ex.io.data.instruction
+  ex_mem.io.in.sextImm := id_ex.io.data.sextImm
+  ex_mem.io.in.writedata := operand2_mux
+  ex_mem.io.in.result := alu.io.result
 
   //  - Set the memory control singals
-  ex_mem_ctrl.io.data.mem_ctrl.memop := id_ex_ctrl.io.data.mem_ctrl.memop
+  ex_mem_ctrl.io.in.mem_ctrl.memop := id_ex_ctrl.io.data.mem_ctrl.memop
 
   //  - Set the writeback control signals
-  ex_mem_ctrl.io.data.wb_ctrl.writeback_valid := id_ex_ctrl.io.data.wb_ctrl.writeback_valid
-  ex_mem_ctrl.io.data.wb_ctrl.writeback_src := id_ex_ctrl.io.data.wb_ctrl.writeback_src
+  ex_mem_ctrl.io.in.wb_ctrl.writeback_valid := id_ex_ctrl.io.data.wb_ctrl.writeback_valid
+  ex_mem_ctrl.io.in.wb_ctrl.writeback_src := id_ex_ctrl.io.data.wb_ctrl.writeback_src
 
   // (Part III and/or Part IV) Set the control signals on the EX_MEM pipeline register
   ex_mem.io.valid      := true.B
