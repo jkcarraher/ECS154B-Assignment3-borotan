@@ -37,8 +37,8 @@ class ForwardingUnit extends Module {
   })
 
   // You can remove those initial values.
-  io.forwardA := 0.U
-  io.forwardB := 0.U
+  //io.forwardA := 0.U
+  //io.forwardB := 0.U
 
   // Your code goes here
   when (io.exmemrw === true.B && io.exmemrd === io.rs1 && io.exmemrd =/= 0.U) {
