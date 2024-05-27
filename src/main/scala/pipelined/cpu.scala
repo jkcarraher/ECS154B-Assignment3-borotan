@@ -186,8 +186,8 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   // Send opcode to control
   control.io.opcode := if_id.io.data.instruction(6,0)
   // Grab rs1 and rs2 from the instruction in this stage
-  val rs1 := if_id.io.data.instruction(19,15)
-  val rs2 := if_id.io.data.instruction(24,20)
+  val rs1 = if_id.io.data.instruction(19,15)
+  val rs2 = if_id.io.data.instruction(24,20)
   // (Part III and/or Part IV) Send inputs from this stage to the hazard detection unit
   hazard.io.rs1 := rs1
   hazard.io.rs2 := rs2
@@ -265,7 +265,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
     operand1_mux := registers.io.writedata
   }
 
-  controlTransfer.io.operand1 = operand1_mux
+  controlTransfer.io.operand1 := operand1_mux
 
   // (Skip for Part I) Insert the forward operand2 mux
 
@@ -280,7 +280,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
     operand2_mux := registers.io.writedata
   }
   
-  controlTransfer.io.operand2 = operand2_mux
+  controlTransfer.io.operand2 := operand2_mux
 
   // Set the ALU operation
   alu.io.operation := aluControl.io.operation

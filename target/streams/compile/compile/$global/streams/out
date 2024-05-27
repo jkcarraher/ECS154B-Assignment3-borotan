@@ -1,23 +1,57 @@
-[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:146:6: reassignment to val[0m
-[0m[[0m[31merror[0m] [0m[0m  pc = ex_mem_ctrl.io.data.nextpc[0m
-[0m[[0m[31merror[0m] [0m[0m     ^[0m
-[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:195:28: not found: value instruction[0m
-[0m[[0m[31merror[0m] [0m[0m  registers.io.readreg1 := instruction(19, 15)[0m
-[0m[[0m[31merror[0m] [0m[0m                           ^[0m
-[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:196:28: not found: value instruction[0m
-[0m[[0m[31merror[0m] [0m[0m  registers.io.readreg2 := instruction(24, 20)[0m
-[0m[[0m[31merror[0m] [0m[0m                           ^[0m
-[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:240:42: not found: value defaultValue[0m
-[0m[[0m[31merror[0m] [0m[0m  controlTransfer.io.operand1 := MuxCase(defaultValue, Seq([0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/components/hazard.scala:58:46: not found: value idex_rd[0m
+[0m[[0m[31merror[0m] [0m[0m  }.elsewhen (io.idex_memread === true.B && (idex_rd === rs1 || idex_rd === rs2)) {[0m
+[0m[[0m[31merror[0m] [0m[0m                                             ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/components/hazard.scala:58:58: not found: value rs1[0m
+[0m[[0m[31merror[0m] [0m[0m  }.elsewhen (io.idex_memread === true.B && (idex_rd === rs1 || idex_rd === rs2)) {[0m
+[0m[[0m[31merror[0m] [0m[0m                                                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/components/hazard.scala:58:65: not found: value idex_rd[0m
+[0m[[0m[31merror[0m] [0m[0m  }.elsewhen (io.idex_memread === true.B && (idex_rd === rs1 || idex_rd === rs2)) {[0m
+[0m[[0m[31merror[0m] [0m[0m                                                                ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/components/hazard.scala:58:77: not found: value rs2[0m
+[0m[[0m[31merror[0m] [0m[0m  }.elsewhen (io.idex_memread === true.B && (idex_rd === rs1 || idex_rd === rs2)) {[0m
+[0m[[0m[31merror[0m] [0m[0m                                                                            ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:249:24: value wb_ctrl is not a member of PipelinedCPU.this.EXMEMBundle[0m
+[0m[[0m[31merror[0m] [0m[0m  when (ex_mem.io.data.wb_ctrl.writeback_src === 0.U) {[0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:290:23: value ex_ctrl is not a member of PipelinedCPU.this.IDEXBundle[0m
+[0m[[0m[31merror[0m] [0m[0m  when (id_ex.io.data.ex_ctrl.op1_src == 0.U) {[0m
+[0m[[0m[31merror[0m] [0m[0m                      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:295:10: value op1 is not a member of chisel3.Bundle{val operation: chisel3.UInt; val operand1: chisel3.UInt; val operand2: chisel3.UInt; val result: chisel3.UInt}[0m
+[0m[[0m[31merror[0m] [0m[0m  alu.io.op1 := op1_mux[0m
+[0m[[0m[31merror[0m] [0m[0m         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:298:23: value ex_ctrl is not a member of PipelinedCPU.this.IDEXBundle[0m
+[0m[[0m[31merror[0m] [0m[0m  when (id_ex.io.data.ex_ctrl.op2_src == 0.U) {[0m
+[0m[[0m[31merror[0m] [0m[0m                      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:300:29: value ex_ctrl is not a member of PipelinedCPU.this.IDEXBundle[0m
+[0m[[0m[31merror[0m] [0m[0m  } .elsewhen(id_ex.io.data.ex_ctrl.op2_src == 1.U){[0m
+[0m[[0m[31merror[0m] [0m[0m                            ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:305:10: value op2 is not a member of chisel3.Bundle{val operation: chisel3.UInt; val operand1: chisel3.UInt; val operand2: chisel3.UInt; val result: chisel3.UInt}[0m
+[0m[[0m[31merror[0m] [0m[0m  alu.io.op2 := op2_mux[0m
+[0m[[0m[31merror[0m] [0m[0m         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:312:18: value nextpc is not a member of PipelinedCPU.this.EXMEMBundle[0m
+[0m[[0m[31merror[0m] [0m[0m  ex_mem.io.data.nextpc := controlTransfer.io.nextpc[0m
+[0m[[0m[31merror[0m] [0m[0m                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:316:18: value mem_ctrl is not a member of PipelinedCPU.this.EXMEMBundle[0m
+[0m[[0m[31merror[0m] [0m[0m  ex_mem.io.data.mem_ctrl.memop := id_ex.io.data.mem_ctrl.memop[0m
+[0m[[0m[31merror[0m] [0m[0m                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:316:50: value mem_ctrl is not a member of PipelinedCPU.this.IDEXBundle[0m
+[0m[[0m[31merror[0m] [0m[0m  ex_mem.io.data.mem_ctrl.memop := id_ex.io.data.mem_ctrl.memop[0m
+[0m[[0m[31merror[0m] [0m[0m                                                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:319:18: value wb_ctrl is not a member of PipelinedCPU.this.EXMEMBundle[0m
+[0m[[0m[31merror[0m] [0m[0m  ex_mem.io.data.wb_ctrl.writeback_valid := id_ex.io.data.wb_ctrl.writeback_valid[0m
+[0m[[0m[31merror[0m] [0m[0m                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:319:59: value wb_ctrl is not a member of PipelinedCPU.this.IDEXBundle[0m
+[0m[[0m[31merror[0m] [0m[0m  ex_mem.io.data.wb_ctrl.writeback_valid := id_ex.io.data.wb_ctrl.writeback_valid[0m
+[0m[[0m[31merror[0m] [0m[0m                                                          ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:320:18: value wb_ctrl is not a member of PipelinedCPU.this.EXMEMBundle[0m
+[0m[[0m[31merror[0m] [0m[0m  ex_mem.io.data.wb_ctrl.writeback_src := id_ex.io.data.wb_ctrl.writeback_src[0m
+[0m[[0m[31merror[0m] [0m[0m                 ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:320:57: value wb_ctrl is not a member of PipelinedCPU.this.IDEXBundle[0m
+[0m[[0m[31merror[0m] [0m[0m  ex_mem.io.data.wb_ctrl.writeback_src := id_ex.io.data.wb_ctrl.writeback_src[0m
+[0m[[0m[31merror[0m] [0m[0m                                                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:379:42: type mismatch;[0m
+[0m[[0m[31merror[0m] [0m[0m found   : Boolean[0m
+[0m[[0m[31merror[0m] [0m[0m required: chisel3.Bool[0m
+[0m[[0m[31merror[0m] [0m[0m  when (mem_wb.io.data.instruction(11,7) == 0.U) {[0m
 [0m[[0m[31merror[0m] [0m[0m                                         ^[0m
-[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:242:41: not found: value exData[0m
-[0m[[0m[31merror[0m] [0m[0m    (forwarding.io.forwardA === 1.U) -> exData,  [0m
-[0m[[0m[31merror[0m] [0m[0m                                        ^[0m
-[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:243:41: not found: value memData[0m
-[0m[[0m[31merror[0m] [0m[0m    (forwarding.io.forwardA === 2.U) -> memData  [0m
-[0m[[0m[31merror[0m] [0m[0m                                        ^[0m
-[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:247:8: not enough arguments for method apply: (cond: => chisel3.Bool)(block: => Unit)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.WhenContext in object when.[0m
-[0m[[0m[31merror[0m] [0m[0mUnspecified value parameter cond.[0m
-[0m[[0m[31merror[0m] [0m[0m  when (){[0m
-[0m[[0m[31merror[0m] [0m[0m       ^[0m
-[0m[[0m[31merror[0m] [0m[0m7 errors found[0m
+[0m[[0m[31merror[0m] [0m[0m18 errors found[0m

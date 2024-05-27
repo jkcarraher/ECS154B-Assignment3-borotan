@@ -43,7 +43,7 @@ class ForwardingUnit extends Module {
   // Your code goes here
   when (io.exmemrw === true.B && io.exmemrd === io.rs1 && io.exmemrd =/= 0.U) {
     io.forwardA := 1.U
-  }.elsewhen (io.membrw === true.B && io.memwbrd === io.rs1 && io.memwbrd =/= 0.U) {
+  }.elsewhen (io.memwbrw === true.B && io.memwbrd === io.rs1 && io.memwbrd =/= 0.U) {
     io.forwardA := 2.U
   }.otherwise {
     io.forwardA := 0.U
@@ -51,7 +51,7 @@ class ForwardingUnit extends Module {
 
   when (io.exmemrw === true.B && io.exmemrd === io.rs2 && io.exmemrd =/= 0.U) {
     io.forwardB := 1.U
-  } elsewhen (io.membrw === true.B && io.memwbrd === io.rs2 && io.memwbrd =/= 0.U) {
+  }.elsewhen (io.memwbrw === true.B && io.memwbrd === io.rs2 && io.memwbrd =/= 0.U) {
     io.forwardB := 2.U
   }.otherwise {
     io.forwardB := 0.U
