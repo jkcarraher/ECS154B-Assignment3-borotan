@@ -226,13 +226,6 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   id_ex_ctrl.io.valid := true.B
   id_ex_ctrl.io.flush := false.B
 
-  // (Part III and/or Part IV) Set the control signals on the ID_EX pipeline register
-  id_ex.io.valid := true.B
-  id_ex.io.flush := false.B
-  id_ex_ctrl.io.valid := true.B
-  id_ex_ctrl.io.flush := false.B
-
-
   /////////////////////////////////////////////////////////////////////////////
   // EX STAGE
   /////////////////////////////////////////////////////////////////////////////
