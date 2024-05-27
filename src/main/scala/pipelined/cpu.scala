@@ -308,8 +308,17 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Sending signals from this stage to MEM stage
   //  - Fill in the EX_MEM register
+  ex_mem.io.data.nextpc := controlTransfer.io.nextpc
+  ex_mem.io.data.taken := controlTransfer.io.taken
+
   //  - Set the memory control singals
+  ex_mem.io.data.mem_ctrl.memop := id_ex.io.data.mem_ctrl.memop
+
   //  - Set the writeback control signals
+  ex_mem.io.data.wb_ctrl.writeback_valid := id_ex.io.data.wb_ctrl.writeback_valid
+  ex_mem.io.data.wb_ctrl.writeback_src := id_ex.io.data.wb_ctrl.writeback_src
+
+
 
   // (Part III and/or Part IV) Set the control signals on the EX_MEM pipeline register
   ex_mem.io.valid      := true.B
