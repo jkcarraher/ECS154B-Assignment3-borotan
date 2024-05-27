@@ -1,3 +1,23 @@
-[0m[[0m[33mwarn[0m] [0m[0mthere were 5 deprecation warnings (since 1.2); re-run with -deprecation for details[0m
-[0m[[0m[33mwarn[0m] [0m[0mthere were 911 feature warnings; re-run with -feature for details[0m
-[0m[[0m[33mwarn[0m] [0m[0mtwo warnings found[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:146:6: reassignment to val[0m
+[0m[[0m[31merror[0m] [0m[0m  pc = ex_mem_ctrl.io.data.nextpc[0m
+[0m[[0m[31merror[0m] [0m[0m     ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:195:28: not found: value instruction[0m
+[0m[[0m[31merror[0m] [0m[0m  registers.io.readreg1 := instruction(19, 15)[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:196:28: not found: value instruction[0m
+[0m[[0m[31merror[0m] [0m[0m  registers.io.readreg2 := instruction(24, 20)[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:240:42: not found: value defaultValue[0m
+[0m[[0m[31merror[0m] [0m[0m  controlTransfer.io.operand1 := MuxCase(defaultValue, Seq([0m
+[0m[[0m[31merror[0m] [0m[0m                                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:242:41: not found: value exData[0m
+[0m[[0m[31merror[0m] [0m[0m    (forwarding.io.forwardA === 1.U) -> exData,  [0m
+[0m[[0m[31merror[0m] [0m[0m                                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:243:41: not found: value memData[0m
+[0m[[0m[31merror[0m] [0m[0m    (forwarding.io.forwardA === 2.U) -> memData  [0m
+[0m[[0m[31merror[0m] [0m[0m                                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/workspaces/ECS154B-Assignment3-borotan/src/main/scala/pipelined/cpu.scala:247:8: not enough arguments for method apply: (cond: => chisel3.Bool)(block: => Unit)(implicit sourceInfo: chisel3.internal.sourceinfo.SourceInfo, implicit compileOptions: chisel3.CompileOptions)chisel3.WhenContext in object when.[0m
+[0m[[0m[31merror[0m] [0m[0mUnspecified value parameter cond.[0m
+[0m[[0m[31merror[0m] [0m[0m  when (){[0m
+[0m[[0m[31merror[0m] [0m[0m       ^[0m
+[0m[[0m[31merror[0m] [0m[0m7 errors found[0m
