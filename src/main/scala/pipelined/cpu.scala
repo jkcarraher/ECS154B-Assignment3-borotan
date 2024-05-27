@@ -226,8 +226,14 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   /////////////////////////////////////////////////////////////////////////////
 
   // (Skip for Part I) Set the inputs to the hazard detection unit from this stage
+  hazard.io.idex_rd := id_ex.io.data.instruction(14,12)
+  hazard.io.idex_memread := id_ex_ctrl.io.data.mem_ctrl.memop 
 
   // (Skip for Part I) Set the inputs to the forwarding unit from this stage
+  forwarding.io.rs1 := id_ex.io.data.instruction(15, 14)
+  forwarding.io.rs2 := id_ex.io.data.instruction(24, 20)
+  forwarding.io.exmemrd := id_ex.io.data.instruction(11, 7)
+  forwarding.io.exmemrw := id_ex_ctrl.io.data.wb_ctrl.writeback_valid
 
   // Connect the ALU Control wires
   aluControl.io.aluop  := id_ex_ctrl.io.data.ex_ctrl.aluop
@@ -318,8 +324,6 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   //  - Set the writeback control signals
   ex_mem_ctrl.io.data.wb_ctrl.writeback_valid := id_ex_ctrl.io.data.wb_ctrl.writeback_valid
   ex_mem_ctrl.io.data.wb_ctrl.writeback_src := id_ex_ctrl.io.data.wb_ctrl.writeback_src
-
-
 
   // (Part III and/or Part IV) Set the control signals on the EX_MEM pipeline register
   ex_mem.io.valid      := true.B
