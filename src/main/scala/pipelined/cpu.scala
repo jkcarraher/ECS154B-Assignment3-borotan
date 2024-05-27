@@ -244,25 +244,67 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // (Skip for Part I) Insert the mux for Selecting data to forward from the MEM stage to the EX stage
   //                   (Can send either alu result or immediate from MEM stage to EX stage)
+  val memForward_mux = Wire(UInt(64.W))
+
+  when (ex_mem.io.data.wb_ctrl.writeback_src === 0.U) {
+    memForward_mux := ex_mem.io.data.result
+  } .otherwise {
+    memForward_mux := ex_mem.io.data.sextImm
+  }
 
   // (Skip for Part I) Insert the forward operand1 mux
 
-  // (Skip for Part I) Insert the forward operand2 mux
-
   // Operand1 mux
   val operand1_mux = Wire(UInt(64.W))
+  
+  when (forwarding.io.forwardA === 0.U) {
+    operand1_mux := id_ex.io.data.readdata1
+  } .elsewhen (forwarding.io.forwardA === 1.U) {
+    operand1_mux := memForward_mux
+  } .otherwise {
+    operand1_mux := registers.io.writedata
+  }
 
-  when ()
+  controlTransfer.io.operand1 = operand1_mux
+
+  // (Skip for Part I) Insert the forward operand2 mux
 
   // Operand2 mux
   val operand2_mux = Wire(UInt(64.W))
 
+  when (forwarding.io.forwardB === 0.U) {
+    operand2_mux := id_ex.io.data.readdata2
+  } .elsewhen (forwarding.io.forwardB === 1.U) {
+    operand2_mux := memForward_mux
+  } .otherwise {
+    operand2_mux := registers.io.writedata
+  }
+
+  controlTransfer.io.operand2 = operand2_mux
+
   // Set the ALU operation
-
-
+  alu.io.operation := aluControl.io.operation
   // Connect the ALU data wires
+  val op1_mux = Wire(UInt(64.W))
+  when (id_ex.io.data.ex_ctrl.op1_src == 0.U) {
+    op1_mux := operand1_mux
+  } .otherwise {
+    op1_mux := id_ex.io.data.pc
+  }
+  alu.io.op1 := op1_mux
+
+  val op2_mux = Wire(UInt(64.W))
+  when (id_ex.io.data.ex_ctrl.op2_src == 0.U) {
+    op2_mux := operand2_mux
+  } .elsewhen(id_ex.io.data.ex_ctrl.op2_src == 1.U){
+    op2_mux := 4.U
+  } .otherwise {
+    op2_mux := ex_mem.io.data.sextImm
+  }
+  alu.io.op2 := op2_mux
 
   // Connect the ControlTransfer data wires
+
 
   // Sending signals from this stage to MEM stage
   //  - Fill in the EX_MEM register
