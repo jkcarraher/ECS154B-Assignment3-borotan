@@ -190,28 +190,40 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   /////////////////////////////////////////////////////////////////////////////
 
   // Send opcode to control
-
+  control.io.opcode := if_id.io.data.instruction(6,0)
   // Grab rs1 and rs2 from the instruction in this stage
-  registers.io.readreg1 := instruction(19, 15)
-  registers.io.readreg2 := instruction(24, 20)
+  val rs1 := if_id.io.data.instruction(19,15)
+  val rs2 := if_id.io.data.instruction(24,20)
   // (Part III and/or Part IV) Send inputs from this stage to the hazard detection unit
 
   // Send rs1 and rs2 to the register file
-
+  registers.io.readreg1 := rs1
+  registers.io.readreg2 := rs2
   // Send the instruction to the immediate generator
-
+  immGen.io.instruction := if_id.io.data.instruction
   // Sending signals from this stage to EX stage
   //  - Fill in the ID_EX register
+  id_ex.io.in.pc := if_id.io.data.pc
+  id_ex.io.in.instruction := if_id.io.data.instruction
+  id_ex.io.in.sextImm := immGen.io.sextImm
+  id_ex.io.in.readdata1 := registers.io.readdata1
+  id_ex.io.in.readdata2 := registers.io.readdata2
   //  - Set the execution control singals
+  id_ex_ctrl.io.in.ex_ctrl.aluop := control.io.aluop
+  id_ex_ctrl.io.in.ex_ctrl.op1_src := control.io.op1_src
+  id_ex_ctrl.io.in.ex_ctrl.op2_src := control.io.op2_src
+  id_ex_ctrl.io.in.ex_ctrl.controltransferop := control.io.controltransferop
   //  - Set the memory control singals
+  id_ex_ctrl.io.in.mem_ctrl := control.io.memop
   //  - Set the writeback control signals
+  id_ex_ctrl.io.in.wb_ctrl := control.io.writeback_valid
+  id_ex_ctrl.io.in.wb_ctrl := control.io.writeback_src
 
   // (Part III and/or Part IV) Set the control signals on the ID_EX pipeline register
   id_ex.io.valid := true.B
   id_ex.io.flush := false.B
   id_ex_ctrl.io.valid := true.B
   id_ex_ctrl.io.flush := false.B
-
 
   /////////////////////////////////////////////////////////////////////////////
   // EX STAGE
