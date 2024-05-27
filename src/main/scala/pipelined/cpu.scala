@@ -147,20 +147,20 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   
 
   //INPUTS TO PC
-  // (Part III) Only update PC when pcstall is false
-  when (hazard.io.pcfromtaken === true.B) {
-    when (hazard.io.pcstall === false.B) {
+  // (Part III) Only update PC when pcstall is false  
+  when (hazard.io.pcstall === false.B) {
+    when (hazard.io.pcfromtaken === true.B) {
       pc := next_pc
     }.otherwise {
-      pc := pc
+      pc := pcPlusFour.io.result
     }
   }.otherwise {
-    when (hazard.io.pcstall === false.B) {
-      pc := pcPlusFour.io.result
-    }.otherwise {
-      pc := pc
-    }
+    pc := pc
   }
+  
+  // Note: Hooking up Adder
+  pcPlusFour.io.inputx := pc
+  pcPlusFour.io.inputy := 4.U
 
   // Send the PC to the instruction memory port to get the instruction
   io.imem.address := pc
