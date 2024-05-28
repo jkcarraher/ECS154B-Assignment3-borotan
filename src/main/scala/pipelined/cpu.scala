@@ -125,7 +125,6 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   //io.dmem := DontCare
   //dontTouch(pc)
-
   //id_ex.io       := DontCare
   //id_ex_ctrl.io  := DontCare
   //ex_mem.io      := DontCare
@@ -178,16 +177,17 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   if_id.io.valid := !hazard.io.if_id_stall
   if_id.io.flush := hazard.io.if_id_flush
 
-
   /////////////////////////////////////////////////////////////////////////////
   // ID STAGE
   /////////////////////////////////////////////////////////////////////////////
 
   // Send opcode to control
   control.io.opcode := if_id.io.data.instruction(6,0)
+
   // Grab rs1 and rs2 from the instruction in this stage
   val rs1 = if_id.io.data.instruction(19,15)
   val rs2 = if_id.io.data.instruction(24,20)
+
   // (Part III and/or Part IV) Send inputs from this stage to the hazard detection unit
   hazard.io.rs1 := rs1
   hazard.io.rs2 := rs2
@@ -195,25 +195,31 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   // Send rs1 and rs2 to the register file
   registers.io.readreg1 := rs1
   registers.io.readreg2 := rs2
+
+  val writedata_mux = Wire(UInt()) //Grabs data from down below
+  registers.io.writedata := writedata_mux
+
   // Send the instruction to the immediate generator
   immGen.io.instruction := if_id.io.data.instruction
+
   // Sending signals from this stage to EX stage
   //  - Fill in the ID_EX register
-  id_ex.io.in.pc := if_id.io.data.pc
+  id_ex.io.in.pc          := if_id.io.data.pc
+  id_ex.io.in.sextImm     := immGen.io.sextImm
   id_ex.io.in.instruction := if_id.io.data.instruction
-  id_ex.io.in.sextImm := immGen.io.sextImm
-  id_ex.io.in.readdata1 := registers.io.readdata1
-  id_ex.io.in.readdata2 := registers.io.readdata2
+  id_ex.io.in.readdata1   := registers.io.readdata1
+  id_ex.io.in.readdata2   := registers.io.readdata2
+
   //  - Set the execution control singals
-  id_ex_ctrl.io.in.ex_ctrl.aluop := control.io.aluop
-  id_ex_ctrl.io.in.ex_ctrl.op1_src := control.io.op1_src
-  id_ex_ctrl.io.in.ex_ctrl.op2_src := control.io.op2_src
-  id_ex_ctrl.io.in.ex_ctrl.controltransferop := control.io.controltransferop
+  id_ex_ctrl.io.in.ex_ctrl.aluop              := control.io.aluop
+  id_ex_ctrl.io.in.ex_ctrl.op1_src            := control.io.op1_src
+  id_ex_ctrl.io.in.ex_ctrl.op2_src            := control.io.op2_src
+  id_ex_ctrl.io.in.ex_ctrl.controltransferop  := control.io.controltransferop
   //  - Set the memory control singals
-  id_ex_ctrl.io.in.mem_ctrl.memop := control.io.memop
+  id_ex_ctrl.io.in.mem_ctrl.memop             := control.io.memop
   //  - Set the writeback control signals
-  id_ex_ctrl.io.in.wb_ctrl.writeback_valid := control.io.writeback_valid
-  id_ex_ctrl.io.in.wb_ctrl.writeback_src := control.io.writeback_src
+  id_ex_ctrl.io.in.wb_ctrl.writeback_valid    := control.io.writeback_valid
+  id_ex_ctrl.io.in.wb_ctrl.writeback_src      := control.io.writeback_src
 
   // (Part III and/or Part IV) Set the control signals on the ID_EX pipeline register
   id_ex.io.valid := true.B
@@ -230,10 +236,10 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   hazard.io.idex_memread := id_ex_ctrl.io.data.mem_ctrl.memop === 2.U
 
   // (Skip for Part I) Set the inputs to the forwarding unit from this stage
-  forwarding.io.rs1 := id_ex.io.data.instruction(19, 15)
-  forwarding.io.rs2 := id_ex.io.data.instruction(24, 20)
+  forwarding.io.rs1     := id_ex.io.data.instruction(19, 15)
+  forwarding.io.rs2     := id_ex.io.data.instruction(24, 20)
   forwarding.io.exmemrd := id_ex.io.data.instruction(11, 7)
-  forwarding.io.exmemrw := id_ex_ctrl.io.data.wb_ctrl.writeback_valid
+  forwarding.io.exmemrw := id_ex_ctrl.io.data.wb_ctrl.writeback_valid === 1.U
 
   // Connect the ALU Control wires
   aluControl.io.aluop  := id_ex_ctrl.io.data.ex_ctrl.aluop
@@ -242,11 +248,6 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
 
   // Connect the ControlTransferUnit control wire
   controlTransfer.io.controltransferop := id_ex_ctrl.io.data.ex_ctrl.controltransferop
-  controlTransfer.io.pc := id_ex.io.data.pc
-  controlTransfer.io.funct3 := id_ex.io.data.instruction(14,12)
-  controlTransfer.io.imm := id_ex.io.data.sextImm
-  controlTransfer.io.operand1 := operand1_mux
-  controlTransfer.io.operand2 := operand2_mux
 
   // (Skip for Part I) Insert the mux for Selecting data to forward from the MEM stage to the EX stage
   //                   (Can send either alu result or immediate from MEM stage to EX stage)
@@ -307,12 +308,16 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   alu.io.operand2 := op2_mux
 
   // Connect the ControlTransfer data wires
-
+  controlTransfer.io.pc := id_ex.io.data.pc
+  controlTransfer.io.funct3 := id_ex.io.data.instruction(14,12)
+  controlTransfer.io.imm := id_ex.io.data.sextImm
+  controlTransfer.io.operand1 := operand1_mux
+  controlTransfer.io.operand2 := operand2_mux
 
   // Sending signals from this stage to MEM stage
   //  - Fill in the EX_MEM register
-  ex_mem.io.in.next_pc := controlTransfer.io.nextpc
-  ex_mem.io.in.taken := controlTransfer.io.taken
+  ex_mem.io.in.next_pc  := controlTransfer.io.nextpc
+  ex_mem.io.in.taken    := controlTransfer.io.taken
   ex_mem.io.in.instruction := id_ex.io.data.instruction
   ex_mem.io.in.sextImm := id_ex.io.data.sextImm
   ex_mem.io.in.writedata := operand2_mux
@@ -336,14 +341,13 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   /////////////////////////////////////////////////////////////////////////////
 
   // Set data memory IO
-  io.dmem.address := ex_mem.io.data.result
-  io.dmem.memread := ex_mem_ctrl.io.data.mem_ctrl.memop === 1.U
-  io.dmem.memwrite := ex_mem_ctrl.io.data.mem_ctrl.memop === 2.U
-  io.dmem.valid := ex_mem_ctrl.io.data.mem_ctrl.memop =/= 0.U
-  io.dmem.maskmode := ex_mem.io.data.instruction(13,12)
-  io.dmem.sext := ~ex_mem.io.data.instruction(14)
+  io.dmem.address   := ex_mem.io.data.result
+  io.dmem.memread   := ex_mem_ctrl.io.data.mem_ctrl.memop === 1.U
+  io.dmem.memwrite  := ex_mem_ctrl.io.data.mem_ctrl.memop === 2.U
+  io.dmem.valid     := ex_mem_ctrl.io.data.mem_ctrl.memop =/= 0.U
+  io.dmem.maskmode  := ex_mem.io.data.instruction(13,12)
+  io.dmem.sext      := ~ex_mem.io.data.instruction(14)
   io.dmem.writedata := ex_mem.io.data.writedata
-
 
   // Send next_pc back to the Fetch stage
   next_pc := ex_mem.io.data.next_pc
@@ -387,7 +391,6 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   }
 
   // Write the data to the register file
-  val writedata_mux = Wire(UInt(64.W))
   when (mem_wb_ctrl.io.data.wb_ctrl.writeback_src === 0.U) {
     writedata_mux := mem_wb.io.data.result
   }.elsewhen (mem_wb_ctrl.io.data.wb_ctrl.writeback_src === 1.U) {
@@ -395,7 +398,6 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   }.elsewhen (mem_wb_ctrl.io.data.wb_ctrl.writeback_src === 2.U) {
     writedata_mux := mem_wb.io.data.readdata
   }
-  registers.io.writedata := writedata_mux
 
   // (Skip for Part I) Set the input signals for the forwarding unit
   forwarding.io.memwbrd := mem_wb.io.data.instruction(11,7)
