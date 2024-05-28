@@ -23,7 +23,7 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
   // Control signals used in EX stage
   class EXControl extends Bundle {
     val aluop             = UInt(3.W)
-    val op1_src           = Bool()
+    val op1_src           = Bool() // Change to 1.W
     val op2_src           = UInt(2.W)
     val controltransferop = UInt(2.W)
   }
