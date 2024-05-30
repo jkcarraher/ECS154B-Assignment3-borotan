@@ -1108,8 +1108,32 @@ circuit Top :
     output io_forwardA : UInt<2>
     output io_forwardB : UInt<2>
   
-    io_forwardA <= UInt<1>("h0") @[forwarding.scala 40:15]
-    io_forwardB <= UInt<1>("h0") @[forwarding.scala 41:15]
+    node _T = eq(io_exmemrw, UInt<1>("h1")) @[forwarding.scala 44:20]
+    node _T_1 = eq(io_exmemrd, io_rs1) @[forwarding.scala 44:45]
+    node _T_2 = and(_T, _T_1) @[forwarding.scala 44:31]
+    node _T_3 = neq(io_exmemrd, UInt<1>("h0")) @[forwarding.scala 44:70]
+    node _T_4 = and(_T_2, _T_3) @[forwarding.scala 44:56]
+    node _T_5 = eq(io_memwbrw, UInt<1>("h1")) @[forwarding.scala 46:26]
+    node _T_6 = eq(io_memwbrd, io_rs1) @[forwarding.scala 46:51]
+    node _T_7 = and(_T_5, _T_6) @[forwarding.scala 46:37]
+    node _T_8 = neq(io_memwbrd, UInt<1>("h0")) @[forwarding.scala 46:76]
+    node _T_9 = and(_T_7, _T_8) @[forwarding.scala 46:62]
+    node _GEN_0 = mux(_T_9, UInt<2>("h2"), UInt<1>("h0")) @[forwarding.scala 46:85]
+    node _GEN_1 = mux(_T_4, UInt<1>("h1"), _GEN_0) @[forwarding.scala 44:79]
+    node _T_10 = eq(io_exmemrw, UInt<1>("h1")) @[forwarding.scala 52:20]
+    node _T_11 = eq(io_exmemrd, io_rs2) @[forwarding.scala 52:45]
+    node _T_12 = and(_T_10, _T_11) @[forwarding.scala 52:31]
+    node _T_13 = neq(io_exmemrd, UInt<1>("h0")) @[forwarding.scala 52:70]
+    node _T_14 = and(_T_12, _T_13) @[forwarding.scala 52:56]
+    node _T_15 = eq(io_memwbrw, UInt<1>("h1")) @[forwarding.scala 54:26]
+    node _T_16 = eq(io_memwbrd, io_rs2) @[forwarding.scala 54:51]
+    node _T_17 = and(_T_15, _T_16) @[forwarding.scala 54:37]
+    node _T_18 = neq(io_memwbrd, UInt<1>("h0")) @[forwarding.scala 54:76]
+    node _T_19 = and(_T_17, _T_18) @[forwarding.scala 54:62]
+    node _GEN_2 = mux(_T_19, UInt<2>("h2"), UInt<1>("h0")) @[forwarding.scala 54:85]
+    node _GEN_3 = mux(_T_14, UInt<1>("h1"), _GEN_2) @[forwarding.scala 52:79]
+    io_forwardA <= _GEN_1 @[forwarding.scala 45:17 forwarding.scala 47:17 forwarding.scala 49:17]
+    io_forwardB <= _GEN_3 @[forwarding.scala 53:17 forwarding.scala 55:17 forwarding.scala 57:17]
 
   module HazardUnit :
     input clock : Clock
@@ -1126,12 +1150,23 @@ circuit Top :
     output io_ex_mem_flush : UInt<1>
     output io_if_id_flush : UInt<1>
   
-    io_pcfromtaken <= UInt<1>("h0") @[hazard.scala 43:19]
-    io_pcstall <= UInt<1>("h0") @[hazard.scala 44:19]
-    io_if_id_stall <= UInt<1>("h0") @[hazard.scala 45:19]
-    io_id_ex_flush <= UInt<1>("h0") @[hazard.scala 46:19]
-    io_ex_mem_flush <= UInt<1>("h0") @[hazard.scala 47:19]
-    io_if_id_flush <= UInt<1>("h0") @[hazard.scala 48:19]
+    node _T = eq(io_exmem_taken, UInt<1>("h1")) @[hazard.scala 43:24]
+    node _T_1 = eq(io_idex_memread, UInt<1>("h1")) @[hazard.scala 50:31]
+    node _T_2 = eq(io_idex_rd, io_rs1) @[hazard.scala 50:57]
+    node _T_3 = eq(io_idex_rd, io_rs2) @[hazard.scala 50:82]
+    node _T_4 = or(_T_2, _T_3) @[hazard.scala 50:68]
+    node _T_5 = and(_T_1, _T_4) @[hazard.scala 50:42]
+    node _GEN_0 = mux(_T_5, UInt<1>("h0"), UInt<1>("h0")) @[hazard.scala 50:95]
+    node _GEN_1 = mux(_T_5, UInt<1>("h1"), UInt<1>("h0")) @[hazard.scala 50:95]
+    node _GEN_2 = mux(_T, UInt<1>("h1"), _GEN_0) @[hazard.scala 43:36]
+    node _GEN_3 = mux(_T, UInt<1>("h0"), _GEN_1) @[hazard.scala 43:36]
+    node _GEN_4 = mux(_T, UInt<1>("h1"), _GEN_1) @[hazard.scala 43:36]
+    io_pcfromtaken <= _GEN_2 @[hazard.scala 44:21 hazard.scala 51:21 hazard.scala 59:21]
+    io_pcstall <= _GEN_3 @[hazard.scala 45:21 hazard.scala 52:21 hazard.scala 60:21]
+    io_if_id_stall <= _GEN_3 @[hazard.scala 46:21 hazard.scala 53:21 hazard.scala 61:21]
+    io_id_ex_flush <= _GEN_4 @[hazard.scala 47:21 hazard.scala 54:21 hazard.scala 62:21]
+    io_ex_mem_flush <= _GEN_2 @[hazard.scala 48:21 hazard.scala 55:21 hazard.scala 63:21]
+    io_if_id_flush <= _GEN_2 @[hazard.scala 49:21 hazard.scala 56:21 hazard.scala 64:21]
 
   module StageReg :
     input clock : Clock
@@ -1163,34 +1198,314 @@ circuit Top :
   module StageReg_1 :
     input clock : Clock
     input reset : UInt<1>
+    input io_in_pc : UInt<64>
+    input io_in_instruction : UInt<32>
+    input io_in_sextImm : UInt<64>
+    input io_in_readdata1 : UInt<64>
+    input io_in_readdata2 : UInt<64>
     input io_flush : UInt<1>
     input io_valid : UInt<1>
+    output io_data_pc : UInt<64>
+    output io_data_instruction : UInt<32>
+    output io_data_sextImm : UInt<64>
+    output io_data_readdata1 : UInt<64>
+    output io_data_readdata2 : UInt<64>
   
-    skip
+    reg reg_pc : UInt<64>, clock with :
+      reset => (UInt<1>("h0"), reg_pc) @[stage-register.scala 43:21]
+    reg reg_instruction : UInt<32>, clock with :
+      reset => (UInt<1>("h0"), reg_instruction) @[stage-register.scala 43:21]
+    reg reg_sextImm : UInt<64>, clock with :
+      reset => (UInt<1>("h0"), reg_sextImm) @[stage-register.scala 43:21]
+    reg reg_readdata1 : UInt<64>, clock with :
+      reset => (UInt<1>("h0"), reg_readdata1) @[stage-register.scala 43:21]
+    reg reg_readdata2 : UInt<64>, clock with :
+      reset => (UInt<1>("h0"), reg_readdata2) @[stage-register.scala 43:21]
+    node _GEN_0 = mux(io_valid, io_in_readdata2, reg_readdata2) @[stage-register.scala 47:19]
+    node _GEN_1 = mux(io_valid, io_in_readdata1, reg_readdata1) @[stage-register.scala 47:19]
+    node _GEN_2 = mux(io_valid, io_in_sextImm, reg_sextImm) @[stage-register.scala 47:19]
+    node _GEN_3 = mux(io_valid, io_in_instruction, reg_instruction) @[stage-register.scala 47:19]
+    node _GEN_4 = mux(io_valid, io_in_pc, reg_pc) @[stage-register.scala 47:19]
+    node _T_1_readdata2 = UInt<64>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_5 = mux(io_flush, _T_1_readdata2, _GEN_0) @[stage-register.scala 51:19]
+    node _T_1_readdata1 = UInt<64>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_6 = mux(io_flush, _T_1_readdata1, _GEN_1) @[stage-register.scala 51:19]
+    node _T_1_sextImm = UInt<64>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_7 = mux(io_flush, _T_1_sextImm, _GEN_2) @[stage-register.scala 51:19]
+    node _T_1_instruction = UInt<32>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_8 = mux(io_flush, _T_1_instruction, _GEN_3) @[stage-register.scala 51:19]
+    node _T_1_pc = UInt<64>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_9 = mux(io_flush, _T_1_pc, _GEN_4) @[stage-register.scala 51:19]
+    node _T_pc = UInt<64>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_instruction = UInt<32>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_sextImm = UInt<64>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_readdata1 = UInt<64>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_readdata2 = UInt<64>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    io_data_pc <= reg_pc @[stage-register.scala 45:11]
+    io_data_instruction <= reg_instruction @[stage-register.scala 45:11]
+    io_data_sextImm <= reg_sextImm @[stage-register.scala 45:11]
+    io_data_readdata1 <= reg_readdata1 @[stage-register.scala 45:11]
+    io_data_readdata2 <= reg_readdata2 @[stage-register.scala 45:11]
+    reg_pc <= mux(reset, _T_pc, _GEN_9) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_instruction <= mux(reset, _T_instruction, _GEN_8) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_sextImm <= mux(reset, _T_sextImm, _GEN_7) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_readdata1 <= mux(reset, _T_readdata1, _GEN_6) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_readdata2 <= mux(reset, _T_readdata2, _GEN_5) @[stage-register.scala 48:9 stage-register.scala 52:9]
 
   module StageReg_2 :
     input clock : Clock
     input reset : UInt<1>
+    input io_in_ex_ctrl_aluop : UInt<3>
+    input io_in_ex_ctrl_op1_src : UInt<1>
+    input io_in_ex_ctrl_op2_src : UInt<2>
+    input io_in_ex_ctrl_controltransferop : UInt<2>
+    input io_in_mem_ctrl_memop : UInt<2>
+    input io_in_wb_ctrl_writeback_valid : UInt<1>
+    input io_in_wb_ctrl_writeback_src : UInt<2>
     input io_flush : UInt<1>
     input io_valid : UInt<1>
+    output io_data_ex_ctrl_aluop : UInt<3>
+    output io_data_ex_ctrl_op1_src : UInt<1>
+    output io_data_ex_ctrl_op2_src : UInt<2>
+    output io_data_ex_ctrl_controltransferop : UInt<2>
+    output io_data_mem_ctrl_memop : UInt<2>
+    output io_data_wb_ctrl_writeback_valid : UInt<1>
+    output io_data_wb_ctrl_writeback_src : UInt<2>
   
-    skip
+    reg reg_ex_ctrl_aluop : UInt<3>, clock with :
+      reset => (UInt<1>("h0"), reg_ex_ctrl_aluop) @[stage-register.scala 43:21]
+    reg reg_ex_ctrl_op1_src : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), reg_ex_ctrl_op1_src) @[stage-register.scala 43:21]
+    reg reg_ex_ctrl_op2_src : UInt<2>, clock with :
+      reset => (UInt<1>("h0"), reg_ex_ctrl_op2_src) @[stage-register.scala 43:21]
+    reg reg_ex_ctrl_controltransferop : UInt<2>, clock with :
+      reset => (UInt<1>("h0"), reg_ex_ctrl_controltransferop) @[stage-register.scala 43:21]
+    reg reg_mem_ctrl_memop : UInt<2>, clock with :
+      reset => (UInt<1>("h0"), reg_mem_ctrl_memop) @[stage-register.scala 43:21]
+    reg reg_wb_ctrl_writeback_valid : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), reg_wb_ctrl_writeback_valid) @[stage-register.scala 43:21]
+    reg reg_wb_ctrl_writeback_src : UInt<2>, clock with :
+      reset => (UInt<1>("h0"), reg_wb_ctrl_writeback_src) @[stage-register.scala 43:21]
+    node _GEN_0 = mux(io_valid, io_in_wb_ctrl_writeback_src, reg_wb_ctrl_writeback_src) @[stage-register.scala 47:19]
+    node _GEN_1 = mux(io_valid, io_in_wb_ctrl_writeback_valid, reg_wb_ctrl_writeback_valid) @[stage-register.scala 47:19]
+    node _GEN_2 = mux(io_valid, io_in_mem_ctrl_memop, reg_mem_ctrl_memop) @[stage-register.scala 47:19]
+    node _GEN_3 = mux(io_valid, io_in_ex_ctrl_controltransferop, reg_ex_ctrl_controltransferop) @[stage-register.scala 47:19]
+    node _GEN_4 = mux(io_valid, io_in_ex_ctrl_op2_src, reg_ex_ctrl_op2_src) @[stage-register.scala 47:19]
+    node _GEN_5 = mux(io_valid, io_in_ex_ctrl_op1_src, reg_ex_ctrl_op1_src) @[stage-register.scala 47:19]
+    node _GEN_6 = mux(io_valid, io_in_ex_ctrl_aluop, reg_ex_ctrl_aluop) @[stage-register.scala 47:19]
+    node _T_1_wb_ctrl_writeback_src = UInt<2>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_7 = mux(io_flush, _T_1_wb_ctrl_writeback_src, _GEN_0) @[stage-register.scala 51:19]
+    node _T_1_wb_ctrl_writeback_valid = UInt<1>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_8 = mux(io_flush, _T_1_wb_ctrl_writeback_valid, _GEN_1) @[stage-register.scala 51:19]
+    node _T_1_mem_ctrl_memop = UInt<2>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_9 = mux(io_flush, _T_1_mem_ctrl_memop, _GEN_2) @[stage-register.scala 51:19]
+    node _T_1_ex_ctrl_controltransferop = UInt<2>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_10 = mux(io_flush, _T_1_ex_ctrl_controltransferop, _GEN_3) @[stage-register.scala 51:19]
+    node _T_1_ex_ctrl_op2_src = UInt<2>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_11 = mux(io_flush, _T_1_ex_ctrl_op2_src, _GEN_4) @[stage-register.scala 51:19]
+    node _T_1_ex_ctrl_op1_src = UInt<1>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_12 = mux(io_flush, _T_1_ex_ctrl_op1_src, _GEN_5) @[stage-register.scala 51:19]
+    node _T_1_ex_ctrl_aluop = UInt<3>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_13 = mux(io_flush, _T_1_ex_ctrl_aluop, _GEN_6) @[stage-register.scala 51:19]
+    node _T_ex_ctrl_aluop = UInt<3>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_ex_ctrl_op1_src = UInt<1>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_ex_ctrl_op2_src = UInt<2>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_ex_ctrl_controltransferop = UInt<2>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_mem_ctrl_memop = UInt<2>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_wb_ctrl_writeback_valid = UInt<1>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_wb_ctrl_writeback_src = UInt<2>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    io_data_ex_ctrl_aluop <= reg_ex_ctrl_aluop @[stage-register.scala 45:11]
+    io_data_ex_ctrl_op1_src <= reg_ex_ctrl_op1_src @[stage-register.scala 45:11]
+    io_data_ex_ctrl_op2_src <= reg_ex_ctrl_op2_src @[stage-register.scala 45:11]
+    io_data_ex_ctrl_controltransferop <= reg_ex_ctrl_controltransferop @[stage-register.scala 45:11]
+    io_data_mem_ctrl_memop <= reg_mem_ctrl_memop @[stage-register.scala 45:11]
+    io_data_wb_ctrl_writeback_valid <= reg_wb_ctrl_writeback_valid @[stage-register.scala 45:11]
+    io_data_wb_ctrl_writeback_src <= reg_wb_ctrl_writeback_src @[stage-register.scala 45:11]
+    reg_ex_ctrl_aluop <= mux(reset, _T_ex_ctrl_aluop, _GEN_13) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_ex_ctrl_op1_src <= mux(reset, _T_ex_ctrl_op1_src, _GEN_12) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_ex_ctrl_op2_src <= mux(reset, _T_ex_ctrl_op2_src, _GEN_11) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_ex_ctrl_controltransferop <= mux(reset, _T_ex_ctrl_controltransferop, _GEN_10) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_mem_ctrl_memop <= mux(reset, _T_mem_ctrl_memop, _GEN_9) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_wb_ctrl_writeback_valid <= mux(reset, _T_wb_ctrl_writeback_valid, _GEN_8) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_wb_ctrl_writeback_src <= mux(reset, _T_wb_ctrl_writeback_src, _GEN_7) @[stage-register.scala 48:9 stage-register.scala 52:9]
+
+  module StageReg_3 :
+    input clock : Clock
+    input reset : UInt<1>
+    input io_in_writedata : UInt<64>
+    input io_in_result : UInt<64>
+    input io_in_sextImm : UInt<64>
+    input io_in_instruction : UInt<32>
+    input io_in_next_pc : UInt<64>
+    input io_in_taken : UInt<1>
+    input io_flush : UInt<1>
+    input io_valid : UInt<1>
+    output io_data_writedata : UInt<64>
+    output io_data_result : UInt<64>
+    output io_data_sextImm : UInt<64>
+    output io_data_instruction : UInt<32>
+    output io_data_next_pc : UInt<64>
+    output io_data_taken : UInt<1>
+  
+    reg reg_writedata : UInt<64>, clock with :
+      reset => (UInt<1>("h0"), reg_writedata) @[stage-register.scala 43:21]
+    reg reg_result : UInt<64>, clock with :
+      reset => (UInt<1>("h0"), reg_result) @[stage-register.scala 43:21]
+    reg reg_sextImm : UInt<64>, clock with :
+      reset => (UInt<1>("h0"), reg_sextImm) @[stage-register.scala 43:21]
+    reg reg_instruction : UInt<32>, clock with :
+      reset => (UInt<1>("h0"), reg_instruction) @[stage-register.scala 43:21]
+    reg reg_next_pc : UInt<64>, clock with :
+      reset => (UInt<1>("h0"), reg_next_pc) @[stage-register.scala 43:21]
+    reg reg_taken : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), reg_taken) @[stage-register.scala 43:21]
+    node _GEN_0 = mux(io_valid, io_in_taken, reg_taken) @[stage-register.scala 47:19]
+    node _GEN_1 = mux(io_valid, io_in_next_pc, reg_next_pc) @[stage-register.scala 47:19]
+    node _GEN_2 = mux(io_valid, io_in_instruction, reg_instruction) @[stage-register.scala 47:19]
+    node _GEN_3 = mux(io_valid, io_in_sextImm, reg_sextImm) @[stage-register.scala 47:19]
+    node _GEN_4 = mux(io_valid, io_in_result, reg_result) @[stage-register.scala 47:19]
+    node _GEN_5 = mux(io_valid, io_in_writedata, reg_writedata) @[stage-register.scala 47:19]
+    node _T_1_taken = UInt<1>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_6 = mux(io_flush, _T_1_taken, _GEN_0) @[stage-register.scala 51:19]
+    node _T_1_next_pc = UInt<64>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_7 = mux(io_flush, _T_1_next_pc, _GEN_1) @[stage-register.scala 51:19]
+    node _T_1_instruction = UInt<32>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_8 = mux(io_flush, _T_1_instruction, _GEN_2) @[stage-register.scala 51:19]
+    node _T_1_sextImm = UInt<64>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_9 = mux(io_flush, _T_1_sextImm, _GEN_3) @[stage-register.scala 51:19]
+    node _T_1_result = UInt<64>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_10 = mux(io_flush, _T_1_result, _GEN_4) @[stage-register.scala 51:19]
+    node _T_1_writedata = UInt<64>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_11 = mux(io_flush, _T_1_writedata, _GEN_5) @[stage-register.scala 51:19]
+    node _T_writedata = UInt<64>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_result = UInt<64>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_sextImm = UInt<64>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_instruction = UInt<32>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_next_pc = UInt<64>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_taken = UInt<1>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    io_data_writedata <= reg_writedata @[stage-register.scala 45:11]
+    io_data_result <= reg_result @[stage-register.scala 45:11]
+    io_data_sextImm <= reg_sextImm @[stage-register.scala 45:11]
+    io_data_instruction <= reg_instruction @[stage-register.scala 45:11]
+    io_data_next_pc <= reg_next_pc @[stage-register.scala 45:11]
+    io_data_taken <= reg_taken @[stage-register.scala 45:11]
+    reg_writedata <= mux(reset, _T_writedata, _GEN_11) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_result <= mux(reset, _T_result, _GEN_10) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_sextImm <= mux(reset, _T_sextImm, _GEN_9) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_instruction <= mux(reset, _T_instruction, _GEN_8) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_next_pc <= mux(reset, _T_next_pc, _GEN_7) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_taken <= mux(reset, _T_taken, _GEN_6) @[stage-register.scala 48:9 stage-register.scala 52:9]
 
   module StageReg_4 :
     input clock : Clock
     input reset : UInt<1>
+    input io_in_mem_ctrl_memop : UInt<2>
+    input io_in_wb_ctrl_writeback_valid : UInt<1>
+    input io_in_wb_ctrl_writeback_src : UInt<2>
     input io_flush : UInt<1>
     input io_valid : UInt<1>
+    output io_data_mem_ctrl_memop : UInt<2>
+    output io_data_wb_ctrl_writeback_valid : UInt<1>
+    output io_data_wb_ctrl_writeback_src : UInt<2>
   
-    skip
+    reg reg_mem_ctrl_memop : UInt<2>, clock with :
+      reset => (UInt<1>("h0"), reg_mem_ctrl_memop) @[stage-register.scala 43:21]
+    reg reg_wb_ctrl_writeback_valid : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), reg_wb_ctrl_writeback_valid) @[stage-register.scala 43:21]
+    reg reg_wb_ctrl_writeback_src : UInt<2>, clock with :
+      reset => (UInt<1>("h0"), reg_wb_ctrl_writeback_src) @[stage-register.scala 43:21]
+    node _GEN_0 = mux(io_valid, io_in_wb_ctrl_writeback_src, reg_wb_ctrl_writeback_src) @[stage-register.scala 47:19]
+    node _GEN_1 = mux(io_valid, io_in_wb_ctrl_writeback_valid, reg_wb_ctrl_writeback_valid) @[stage-register.scala 47:19]
+    node _GEN_2 = mux(io_valid, io_in_mem_ctrl_memop, reg_mem_ctrl_memop) @[stage-register.scala 47:19]
+    node _T_1_wb_ctrl_writeback_src = UInt<2>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_3 = mux(io_flush, _T_1_wb_ctrl_writeback_src, _GEN_0) @[stage-register.scala 51:19]
+    node _T_1_wb_ctrl_writeback_valid = UInt<1>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_4 = mux(io_flush, _T_1_wb_ctrl_writeback_valid, _GEN_1) @[stage-register.scala 51:19]
+    node _T_1_mem_ctrl_memop = UInt<2>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_5 = mux(io_flush, _T_1_mem_ctrl_memop, _GEN_2) @[stage-register.scala 51:19]
+    node _T_mem_ctrl_memop = UInt<2>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_wb_ctrl_writeback_valid = UInt<1>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_wb_ctrl_writeback_src = UInt<2>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    io_data_mem_ctrl_memop <= reg_mem_ctrl_memop @[stage-register.scala 45:11]
+    io_data_wb_ctrl_writeback_valid <= reg_wb_ctrl_writeback_valid @[stage-register.scala 45:11]
+    io_data_wb_ctrl_writeback_src <= reg_wb_ctrl_writeback_src @[stage-register.scala 45:11]
+    reg_mem_ctrl_memop <= mux(reset, _T_mem_ctrl_memop, _GEN_5) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_wb_ctrl_writeback_valid <= mux(reset, _T_wb_ctrl_writeback_valid, _GEN_4) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_wb_ctrl_writeback_src <= mux(reset, _T_wb_ctrl_writeback_src, _GEN_3) @[stage-register.scala 48:9 stage-register.scala 52:9]
+
+  module StageReg_5 :
+    input clock : Clock
+    input reset : UInt<1>
+    input io_in_instruction : UInt<32>
+    input io_in_readdata : UInt<64>
+    input io_in_result : UInt<64>
+    input io_in_sextImm : UInt<64>
+    input io_flush : UInt<1>
+    input io_valid : UInt<1>
+    output io_data_instruction : UInt<32>
+    output io_data_readdata : UInt<64>
+    output io_data_result : UInt<64>
+    output io_data_sextImm : UInt<64>
+  
+    reg reg_instruction : UInt<32>, clock with :
+      reset => (UInt<1>("h0"), reg_instruction) @[stage-register.scala 43:21]
+    reg reg_readdata : UInt<64>, clock with :
+      reset => (UInt<1>("h0"), reg_readdata) @[stage-register.scala 43:21]
+    reg reg_result : UInt<64>, clock with :
+      reset => (UInt<1>("h0"), reg_result) @[stage-register.scala 43:21]
+    reg reg_sextImm : UInt<64>, clock with :
+      reset => (UInt<1>("h0"), reg_sextImm) @[stage-register.scala 43:21]
+    node _GEN_0 = mux(io_valid, io_in_sextImm, reg_sextImm) @[stage-register.scala 47:19]
+    node _GEN_1 = mux(io_valid, io_in_result, reg_result) @[stage-register.scala 47:19]
+    node _GEN_2 = mux(io_valid, io_in_readdata, reg_readdata) @[stage-register.scala 47:19]
+    node _GEN_3 = mux(io_valid, io_in_instruction, reg_instruction) @[stage-register.scala 47:19]
+    node _T_1_sextImm = UInt<64>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_4 = mux(io_flush, _T_1_sextImm, _GEN_0) @[stage-register.scala 51:19]
+    node _T_1_result = UInt<64>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_5 = mux(io_flush, _T_1_result, _GEN_1) @[stage-register.scala 51:19]
+    node _T_1_readdata = UInt<64>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_6 = mux(io_flush, _T_1_readdata, _GEN_2) @[stage-register.scala 51:19]
+    node _T_1_instruction = UInt<32>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_7 = mux(io_flush, _T_1_instruction, _GEN_3) @[stage-register.scala 51:19]
+    node _T_instruction = UInt<32>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_readdata = UInt<64>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_result = UInt<64>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_sextImm = UInt<64>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    io_data_instruction <= reg_instruction @[stage-register.scala 45:11]
+    io_data_readdata <= reg_readdata @[stage-register.scala 45:11]
+    io_data_result <= reg_result @[stage-register.scala 45:11]
+    io_data_sextImm <= reg_sextImm @[stage-register.scala 45:11]
+    reg_instruction <= mux(reset, _T_instruction, _GEN_7) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_readdata <= mux(reset, _T_readdata, _GEN_6) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_result <= mux(reset, _T_result, _GEN_5) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_sextImm <= mux(reset, _T_sextImm, _GEN_4) @[stage-register.scala 48:9 stage-register.scala 52:9]
 
   module StageReg_6 :
     input clock : Clock
     input reset : UInt<1>
+    input io_in_wb_ctrl_writeback_valid : UInt<1>
+    input io_in_wb_ctrl_writeback_src : UInt<2>
     input io_flush : UInt<1>
     input io_valid : UInt<1>
+    output io_data_wb_ctrl_writeback_valid : UInt<1>
+    output io_data_wb_ctrl_writeback_src : UInt<2>
   
-    skip
+    reg reg_wb_ctrl_writeback_valid : UInt<1>, clock with :
+      reset => (UInt<1>("h0"), reg_wb_ctrl_writeback_valid) @[stage-register.scala 43:21]
+    reg reg_wb_ctrl_writeback_src : UInt<2>, clock with :
+      reset => (UInt<1>("h0"), reg_wb_ctrl_writeback_src) @[stage-register.scala 43:21]
+    node _GEN_0 = mux(io_valid, io_in_wb_ctrl_writeback_src, reg_wb_ctrl_writeback_src) @[stage-register.scala 47:19]
+    node _GEN_1 = mux(io_valid, io_in_wb_ctrl_writeback_valid, reg_wb_ctrl_writeback_valid) @[stage-register.scala 47:19]
+    node _T_1_wb_ctrl_writeback_src = UInt<2>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_2 = mux(io_flush, _T_1_wb_ctrl_writeback_src, _GEN_0) @[stage-register.scala 51:19]
+    node _T_1_wb_ctrl_writeback_valid = UInt<1>("h0") @[stage-register.scala 52:25 stage-register.scala 52:25]
+    node _GEN_3 = mux(io_flush, _T_1_wb_ctrl_writeback_valid, _GEN_1) @[stage-register.scala 51:19]
+    node _T_wb_ctrl_writeback_valid = UInt<1>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    node _T_wb_ctrl_writeback_src = UInt<2>("h0") @[stage-register.scala 43:35 stage-register.scala 43:35]
+    io_data_wb_ctrl_writeback_valid <= reg_wb_ctrl_writeback_valid @[stage-register.scala 45:11]
+    io_data_wb_ctrl_writeback_src <= reg_wb_ctrl_writeback_src @[stage-register.scala 45:11]
+    reg_wb_ctrl_writeback_valid <= mux(reset, _T_wb_ctrl_writeback_valid, _GEN_3) @[stage-register.scala 48:9 stage-register.scala 52:9]
+    reg_wb_ctrl_writeback_src <= mux(reset, _T_wb_ctrl_writeback_src, _GEN_2) @[stage-register.scala 48:9 stage-register.scala 52:9]
 
   module PipelinedCPU :
     input clock : Clock
@@ -1210,24 +1525,24 @@ circuit Top :
     output io_dmem_sext : UInt<1>
     input io_dmem_readdata : UInt<64>
   
-    inst control of Control @[cpu.scala 67:31]
-    inst registers of RegisterFile @[cpu.scala 68:31]
-    inst aluControl of ALUControl @[cpu.scala 69:31]
-    inst alu of ALU @[cpu.scala 70:31]
-    inst immGen of ImmediateGenerator @[cpu.scala 71:31]
-    inst controlTransfer of ControlTransferUnit @[cpu.scala 72:31]
-    inst pcPlusFour of Adder @[cpu.scala 73:31]
-    inst forwarding of ForwardingUnit @[cpu.scala 74:31]
-    inst hazard of HazardUnit @[cpu.scala 75:31]
-    inst if_id of StageReg @[cpu.scala 79:27]
-    inst id_ex of StageReg_1 @[cpu.scala 81:27]
-    inst id_ex_ctrl of StageReg_2 @[cpu.scala 82:27]
-    inst ex_mem of StageReg_1 @[cpu.scala 84:27]
-    inst ex_mem_ctrl of StageReg_4 @[cpu.scala 85:27]
-    inst mem_wb of StageReg_1 @[cpu.scala 87:27]
-    inst mem_wb_ctrl of StageReg_6 @[cpu.scala 91:27]
+    inst control of Control @[cpu.scala 89:31]
+    inst registers of RegisterFile @[cpu.scala 90:31]
+    inst aluControl of ALUControl @[cpu.scala 91:31]
+    inst alu of ALU @[cpu.scala 92:31]
+    inst immGen of ImmediateGenerator @[cpu.scala 93:31]
+    inst controlTransfer of ControlTransferUnit @[cpu.scala 94:31]
+    inst pcPlusFour of Adder @[cpu.scala 95:31]
+    inst forwarding of ForwardingUnit @[cpu.scala 96:31]
+    inst hazard of HazardUnit @[cpu.scala 97:31]
+    inst if_id of StageReg @[cpu.scala 101:27]
+    inst id_ex of StageReg_1 @[cpu.scala 103:27]
+    inst id_ex_ctrl of StageReg_2 @[cpu.scala 104:27]
+    inst ex_mem of StageReg_3 @[cpu.scala 106:27]
+    inst ex_mem_ctrl of StageReg_4 @[cpu.scala 107:27]
+    inst mem_wb of StageReg_5 @[cpu.scala 109:27]
+    inst mem_wb_ctrl of StageReg_6 @[cpu.scala 113:27]
     reg pc : UInt<64>, clock with :
-      reset => (UInt<1>("h0"), pc) @[cpu.scala 66:32]
+      reset => (UInt<1>("h0"), pc) @[cpu.scala 88:32]
     reg value : UInt<30>, clock with :
       reset => (UInt<1>("h0"), value) @[Counter.scala 29:33]
     node _T_1 = eq(value, UInt<30>("h3fffffff")) @[Counter.scala 38:24]
@@ -1235,104 +1550,188 @@ circuit Top :
     node _T_3 = tail(_T_2, 1) @[Counter.scala 39:22]
     node _GEN_0 = mux(UInt<1>("h1"), _T_3, value) @[Counter.scala 67:17]
     node _GEN_1 = mux(UInt<1>("h1"), _T_1, UInt<1>("h0")) @[Counter.scala 67:17]
-    node _T_4 = rem(pc, UInt<4>("h8")) @[cpu.scala 131:13]
-    node _T_5 = eq(_T_4, UInt<3>("h4")) @[cpu.scala 131:20]
-    node _T_6 = bits(io_imem_instruction, 63, 32) @[cpu.scala 132:51]
-    node _T_7 = bits(io_imem_instruction, 31, 0) @[cpu.scala 134:51]
-    node _GEN_2 = mux(_T_5, _T_6, _T_7) @[cpu.scala 131:29]
+    node _T_4 = eq(hazard.io_pcstall, UInt<1>("h0")) @[cpu.scala 150:27]
+    node _T_5 = eq(hazard.io_pcfromtaken, UInt<1>("h1")) @[cpu.scala 151:33]
+    node next_pc = ex_mem.io_data_next_pc @[cpu.scala 136:21 cpu.scala 353:11]
+    node _GEN_2 = mux(_T_5, next_pc, pcPlusFour.io_result) @[cpu.scala 151:45]
+    node _GEN_3 = mux(_T_4, _GEN_2, pc) @[cpu.scala 150:40]
+    node _T_6 = rem(pc, UInt<4>("h8")) @[cpu.scala 169:13]
+    node _T_7 = eq(_T_6, UInt<3>("h4")) @[cpu.scala 169:20]
+    node _T_8 = bits(io_imem_instruction, 63, 32) @[cpu.scala 170:51]
+    node _T_9 = bits(io_imem_instruction, 31, 0) @[cpu.scala 172:51]
+    node _GEN_4 = mux(_T_7, _T_8, _T_9) @[cpu.scala 169:29]
+    node _T_10 = eq(hazard.io_if_id_stall, UInt<1>("h0")) @[cpu.scala 177:21]
+    node _T_11 = bits(if_id.io_data_instruction, 6, 0) @[cpu.scala 185:49]
+    node rs1 = bits(if_id.io_data_instruction, 19, 15) @[cpu.scala 188:38]
+    node rs2 = bits(if_id.io_data_instruction, 24, 20) @[cpu.scala 189:38]
+    node _T_12 = bits(id_ex.io_data_instruction, 11, 7) @[cpu.scala 235:49]
+    node _T_13 = eq(id_ex_ctrl.io_data_mem_ctrl_memop, UInt<2>("h2")) @[cpu.scala 236:63]
+    node _T_14 = bits(id_ex.io_data_instruction, 19, 15) @[cpu.scala 239:53]
+    node _T_15 = bits(id_ex.io_data_instruction, 24, 20) @[cpu.scala 240:53]
+    node _T_16 = bits(id_ex.io_data_instruction, 11, 7) @[cpu.scala 241:53]
+    node _T_17 = eq(id_ex_ctrl.io_data_wb_ctrl_writeback_valid, UInt<1>("h1")) @[cpu.scala 242:71]
+    node _T_18 = bits(id_ex.io_data_instruction, 14, 12) @[cpu.scala 246:52]
+    node _T_19 = bits(id_ex.io_data_instruction, 31, 25) @[cpu.scala 247:52]
+    node _T_20 = eq(id_ex_ctrl.io_data_wb_ctrl_writeback_src, UInt<1>("h0")) @[cpu.scala 256:50]
+    node _GEN_5 = mux(_T_20, ex_mem.io_data_result, ex_mem.io_data_sextImm) @[cpu.scala 256:59]
+    node _T_21 = eq(forwarding.io_forwardA, UInt<1>("h0")) @[cpu.scala 267:32]
+    node _T_22 = eq(forwarding.io_forwardA, UInt<1>("h1")) @[cpu.scala 269:39]
+    node memForward_mux = _GEN_5 @[cpu.scala 254:28 cpu.scala 257:20 cpu.scala 259:20]
+    node _T_39 = eq(mem_wb_ctrl.io_data_wb_ctrl_writeback_src, UInt<1>("h0")) @[cpu.scala 397:51]
+    node _T_40 = eq(mem_wb_ctrl.io_data_wb_ctrl_writeback_src, UInt<1>("h1")) @[cpu.scala 399:57]
+    node _T_41 = eq(mem_wb_ctrl.io_data_wb_ctrl_writeback_src, UInt<2>("h2")) @[cpu.scala 401:57]
+    node _T_38 = bits(mem_wb.io_data_instruction, 11, 7) @[cpu.scala 394:46]
+    node _GEN_14 = mux(_T_41, mem_wb.io_data_readdata, _T_38) @[cpu.scala 401:66]
+    node _GEN_15 = mux(_T_40, mem_wb.io_data_sextImm, _GEN_14) @[cpu.scala 399:66]
+    node _GEN_16 = mux(_T_39, mem_wb.io_data_result, _GEN_15) @[cpu.scala 397:60]
+    node writedata_mux = _GEN_16 @[cpu.scala 199:27 cpu.scala 394:17 cpu.scala 398:19 cpu.scala 400:19 cpu.scala 402:19]
+    node _GEN_6 = mux(_T_22, memForward_mux, writedata_mux) @[cpu.scala 269:48]
+    node _GEN_7 = mux(_T_21, id_ex.io_data_readdata1, _GEN_6) @[cpu.scala 267:41]
+    node _T_23 = eq(forwarding.io_forwardB, UInt<1>("h0")) @[cpu.scala 280:32]
+    node _T_24 = eq(forwarding.io_forwardB, UInt<1>("h1")) @[cpu.scala 282:39]
+    node _GEN_8 = mux(_T_24, memForward_mux, writedata_mux) @[cpu.scala 282:48]
+    node _GEN_9 = mux(_T_23, id_ex.io_data_readdata2, _GEN_8) @[cpu.scala 280:41]
+    node _T_25 = eq(id_ex_ctrl.io_data_ex_ctrl_op1_src, UInt<1>("h0")) @[cpu.scala 293:44]
+    node operand1_mux = _GEN_7 @[cpu.scala 265:26 cpu.scala 268:18 cpu.scala 270:18 cpu.scala 272:18]
+    node _GEN_10 = mux(_T_25, operand1_mux, id_ex.io_data_pc) @[cpu.scala 293:53]
+    node _T_26 = eq(id_ex_ctrl.io_data_ex_ctrl_op2_src, UInt<1>("h0")) @[cpu.scala 301:44]
+    node _T_27 = eq(id_ex_ctrl.io_data_ex_ctrl_op2_src, UInt<1>("h1")) @[cpu.scala 303:50]
+    node _GEN_11 = mux(_T_27, UInt<3>("h4"), ex_mem.io_data_sextImm) @[cpu.scala 303:58]
+    node operand2_mux = _GEN_9 @[cpu.scala 278:26 cpu.scala 281:18 cpu.scala 283:18 cpu.scala 285:18]
+    node _GEN_12 = mux(_T_26, operand2_mux, _GEN_11) @[cpu.scala 301:53]
+    node _T_28 = bits(id_ex.io_data_instruction, 14, 12) @[cpu.scala 312:57]
+    node _T_29 = eq(ex_mem_ctrl.io_data_mem_ctrl_memop, UInt<1>("h1")) @[cpu.scala 345:59]
+    node _T_30 = eq(ex_mem_ctrl.io_data_mem_ctrl_memop, UInt<2>("h2")) @[cpu.scala 346:59]
+    node _T_31 = neq(ex_mem_ctrl.io_data_mem_ctrl_memop, UInt<1>("h0")) @[cpu.scala 347:59]
+    node _T_32 = bits(ex_mem.io_data_instruction, 13, 12) @[cpu.scala 348:50]
+    node _T_33 = bits(ex_mem.io_data_instruction, 14, 14) @[cpu.scala 349:51]
+    node _T_34 = not(_T_33) @[cpu.scala 349:24]
+    node _T_35 = bits(mem_wb.io_data_instruction, 11, 7) @[cpu.scala 384:54]
+    node _T_36 = bits(mem_wb.io_data_instruction, 11, 7) @[cpu.scala 387:35]
+    node _T_37 = eq(_T_36, UInt<1>("h0")) @[cpu.scala 387:42]
+    node _GEN_13 = mux(_T_37, UInt<1>("h0"), mem_wb_ctrl.io_data_wb_ctrl_writeback_valid) @[cpu.scala 387:51]
+    node _T_42 = bits(mem_wb.io_data_instruction, 11, 7) @[cpu.scala 406:54]
     node _T = _GEN_1 @[Counter.scala 67:24]
-    node next_pc = validif(UInt<1>("h0"), UInt<64>("h0"))
-    io_imem_address <= pc @[cpu.scala 127:19]
-    io_imem_valid <= UInt<1>("h1") @[cpu.scala 128:19]
-    io_dmem_address is invalid
-    io_dmem_valid is invalid
-    io_dmem_writedata is invalid
-    io_dmem_memread is invalid
-    io_dmem_memwrite is invalid
-    io_dmem_maskmode is invalid
-    io_dmem_sext is invalid
-    pc <= mux(reset, UInt<64>("h0"), pc)
+    node op1_mux = _GEN_10 @[cpu.scala 292:21 cpu.scala 294:13 cpu.scala 296:13]
+    node op2_mux = _GEN_12 @[cpu.scala 300:21 cpu.scala 302:13 cpu.scala 304:13 cpu.scala 306:13]
+    io_imem_address <= pc @[cpu.scala 165:19]
+    io_imem_valid <= UInt<1>("h1") @[cpu.scala 166:19]
+    io_dmem_address <= ex_mem.io_data_result @[cpu.scala 344:21]
+    io_dmem_valid <= _T_31 @[cpu.scala 347:21]
+    io_dmem_writedata <= ex_mem.io_data_writedata @[cpu.scala 350:21]
+    io_dmem_memread <= _T_29 @[cpu.scala 345:21]
+    io_dmem_memwrite <= _T_30 @[cpu.scala 346:21]
+    io_dmem_maskmode <= _T_32 @[cpu.scala 348:21]
+    io_dmem_sext <= _T_34 @[cpu.scala 349:21]
+    pc <= mux(reset, UInt<64>("h0"), _GEN_3) @[cpu.scala 152:10 cpu.scala 154:10 cpu.scala 157:8]
     control.clock <= clock
     control.reset <= reset
-    control.io_opcode is invalid
+    control.io_opcode <= _T_11 @[cpu.scala 185:21]
     registers.clock <= clock
     registers.reset <= reset
-    registers.io_readreg1 is invalid
-    registers.io_readreg2 is invalid
-    registers.io_writereg is invalid
-    registers.io_writedata is invalid
-    registers.io_wen is invalid
+    registers.io_readreg1 <= rs1 @[cpu.scala 196:25]
+    registers.io_readreg2 <= rs2 @[cpu.scala 197:25]
+    registers.io_writereg <= _T_35 @[cpu.scala 384:25]
+    registers.io_writedata <= writedata_mux @[cpu.scala 200:26]
+    registers.io_wen <= _GEN_13 @[cpu.scala 388:22 cpu.scala 390:22]
     aluControl.clock <= clock
     aluControl.reset <= reset
-    aluControl.io_aluop is invalid
-    aluControl.io_funct7 is invalid
-    aluControl.io_funct3 is invalid
+    aluControl.io_aluop <= id_ex_ctrl.io_data_ex_ctrl_aluop @[cpu.scala 245:24]
+    aluControl.io_funct7 <= _T_19 @[cpu.scala 247:24]
+    aluControl.io_funct3 <= _T_18 @[cpu.scala 246:24]
     alu.clock <= clock
     alu.reset <= reset
-    alu.io_operation is invalid
-    alu.io_operand1 is invalid
-    alu.io_operand2 is invalid
+    alu.io_operation <= aluControl.io_operation @[cpu.scala 289:20]
+    alu.io_operand1 <= op1_mux @[cpu.scala 298:19]
+    alu.io_operand2 <= op2_mux @[cpu.scala 308:19]
     immGen.clock <= clock
     immGen.reset <= reset
-    immGen.io_instruction is invalid
+    immGen.io_instruction <= if_id.io_data_instruction @[cpu.scala 203:25]
     controlTransfer.clock <= clock
     controlTransfer.reset <= reset
-    controlTransfer.io_controltransferop is invalid
-    controlTransfer.io_operand1 is invalid
-    controlTransfer.io_operand2 is invalid
-    controlTransfer.io_funct3 is invalid
-    controlTransfer.io_pc is invalid
-    controlTransfer.io_imm is invalid
+    controlTransfer.io_controltransferop <= id_ex_ctrl.io_data_ex_ctrl_controltransferop @[cpu.scala 250:40]
+    controlTransfer.io_operand1 <= operand1_mux @[cpu.scala 314:31]
+    controlTransfer.io_operand2 <= operand2_mux @[cpu.scala 315:31]
+    controlTransfer.io_funct3 <= _T_28 @[cpu.scala 312:29]
+    controlTransfer.io_pc <= id_ex.io_data_pc @[cpu.scala 311:25]
+    controlTransfer.io_imm <= id_ex.io_data_sextImm @[cpu.scala 313:26]
     pcPlusFour.clock <= clock
     pcPlusFour.reset <= reset
-    pcPlusFour.io_inputx is invalid
-    pcPlusFour.io_inputy is invalid
+    pcPlusFour.io_inputx <= pc @[cpu.scala 161:24]
+    pcPlusFour.io_inputy <= UInt<3>("h4") @[cpu.scala 162:24]
     forwarding.clock <= clock
     forwarding.reset <= reset
-    forwarding.io_rs1 is invalid
-    forwarding.io_rs2 is invalid
-    forwarding.io_exmemrd is invalid
-    forwarding.io_exmemrw is invalid
-    forwarding.io_memwbrd is invalid
-    forwarding.io_memwbrw is invalid
+    forwarding.io_rs1 <= _T_14 @[cpu.scala 239:25]
+    forwarding.io_rs2 <= _T_15 @[cpu.scala 240:25]
+    forwarding.io_exmemrd <= _T_16 @[cpu.scala 241:25]
+    forwarding.io_exmemrw <= _T_17 @[cpu.scala 242:25]
+    forwarding.io_memwbrd <= _T_42 @[cpu.scala 406:25]
+    forwarding.io_memwbrw <= mem_wb_ctrl.io_data_wb_ctrl_writeback_valid @[cpu.scala 407:25]
     hazard.clock <= clock
     hazard.reset <= reset
-    hazard.io_rs1 is invalid
-    hazard.io_rs2 is invalid
-    hazard.io_idex_memread is invalid
-    hazard.io_idex_rd is invalid
-    hazard.io_exmem_taken is invalid
+    hazard.io_rs1 <= rs1 @[cpu.scala 192:17]
+    hazard.io_rs2 <= rs2 @[cpu.scala 193:17]
+    hazard.io_idex_memread <= _T_13 @[cpu.scala 236:26]
+    hazard.io_idex_rd <= _T_12 @[cpu.scala 235:21]
+    hazard.io_exmem_taken <= ex_mem.io_data_taken @[cpu.scala 356:25]
     value <= mux(reset, UInt<30>("h0"), _GEN_0) @[Counter.scala 39:13]
     if_id.clock <= clock
     if_id.reset <= reset
-    if_id.io_in_instruction <= _GEN_2 @[cpu.scala 132:29 cpu.scala 134:29]
-    if_id.io_in_pc <= pc @[cpu.scala 136:18]
-    if_id.io_flush <= UInt<1>("h0") @[cpu.scala 140:18]
-    if_id.io_valid <= UInt<1>("h1") @[cpu.scala 139:18]
+    if_id.io_in_instruction <= _GEN_4 @[cpu.scala 170:29 cpu.scala 172:29]
+    if_id.io_in_pc <= pc @[cpu.scala 174:18]
+    if_id.io_flush <= hazard.io_if_id_flush @[cpu.scala 178:18]
+    if_id.io_valid <= _T_10 @[cpu.scala 177:18]
     id_ex.clock <= clock
     id_ex.reset <= reset
-    id_ex.io_flush <= UInt<1>("h0") @[cpu.scala 165:18]
-    id_ex.io_valid <= UInt<1>("h1") @[cpu.scala 164:18]
+    id_ex.io_in_pc <= if_id.io_data_pc @[cpu.scala 207:27]
+    id_ex.io_in_instruction <= if_id.io_data_instruction @[cpu.scala 209:27]
+    id_ex.io_in_sextImm <= immGen.io_sextImm @[cpu.scala 208:27]
+    id_ex.io_in_readdata1 <= registers.io_readdata1 @[cpu.scala 210:27]
+    id_ex.io_in_readdata2 <= registers.io_readdata2 @[cpu.scala 211:27]
+    id_ex.io_flush <= hazard.io_id_ex_flush @[cpu.scala 226:18]
+    id_ex.io_valid <= UInt<1>("h1") @[cpu.scala 225:18]
     id_ex_ctrl.clock <= clock
     id_ex_ctrl.reset <= reset
-    id_ex_ctrl.io_flush <= UInt<1>("h0") @[cpu.scala 167:23]
-    id_ex_ctrl.io_valid <= UInt<1>("h1") @[cpu.scala 166:23]
+    id_ex_ctrl.io_in_ex_ctrl_aluop <= control.io_aluop @[cpu.scala 214:47]
+    id_ex_ctrl.io_in_ex_ctrl_op1_src <= control.io_op1_src @[cpu.scala 215:47]
+    id_ex_ctrl.io_in_ex_ctrl_op2_src <= control.io_op2_src @[cpu.scala 216:47]
+    id_ex_ctrl.io_in_ex_ctrl_controltransferop <= control.io_controltransferop @[cpu.scala 217:47]
+    id_ex_ctrl.io_in_mem_ctrl_memop <= control.io_memop @[cpu.scala 219:47]
+    id_ex_ctrl.io_in_wb_ctrl_writeback_valid <= control.io_writeback_valid @[cpu.scala 221:47]
+    id_ex_ctrl.io_in_wb_ctrl_writeback_src <= control.io_writeback_src @[cpu.scala 222:47]
+    id_ex_ctrl.io_flush <= hazard.io_id_ex_flush @[cpu.scala 228:23]
+    id_ex_ctrl.io_valid <= UInt<1>("h1") @[cpu.scala 227:23]
     ex_mem.clock <= clock
     ex_mem.reset <= reset
-    ex_mem.io_flush <= UInt<1>("h0") @[cpu.scala 206:24]
-    ex_mem.io_valid <= UInt<1>("h1") @[cpu.scala 205:24]
+    ex_mem.io_in_writedata <= operand2_mux @[cpu.scala 323:26]
+    ex_mem.io_in_result <= alu.io_result @[cpu.scala 324:23]
+    ex_mem.io_in_sextImm <= id_ex.io_data_sextImm @[cpu.scala 322:24]
+    ex_mem.io_in_instruction <= id_ex.io_data_instruction @[cpu.scala 321:28]
+    ex_mem.io_in_next_pc <= controlTransfer.io_nextpc @[cpu.scala 319:25]
+    ex_mem.io_in_taken <= controlTransfer.io_taken @[cpu.scala 320:25]
+    ex_mem.io_flush <= hazard.io_ex_mem_flush @[cpu.scala 335:24]
+    ex_mem.io_valid <= UInt<1>("h1") @[cpu.scala 334:24]
     ex_mem_ctrl.clock <= clock
     ex_mem_ctrl.reset <= reset
-    ex_mem_ctrl.io_flush <= UInt<1>("h0") @[cpu.scala 208:24]
-    ex_mem_ctrl.io_valid <= UInt<1>("h1") @[cpu.scala 207:24]
+    ex_mem_ctrl.io_in_mem_ctrl_memop <= id_ex_ctrl.io_data_mem_ctrl_memop @[cpu.scala 327:36]
+    ex_mem_ctrl.io_in_wb_ctrl_writeback_valid <= id_ex_ctrl.io_data_wb_ctrl_writeback_valid @[cpu.scala 330:45]
+    ex_mem_ctrl.io_in_wb_ctrl_writeback_src <= id_ex_ctrl.io_data_wb_ctrl_writeback_src @[cpu.scala 331:43]
+    ex_mem_ctrl.io_flush <= hazard.io_ex_mem_flush @[cpu.scala 337:24]
+    ex_mem_ctrl.io_valid <= UInt<1>("h1") @[cpu.scala 336:24]
     mem_wb.clock <= clock
     mem_wb.reset <= reset
-    mem_wb.io_flush <= UInt<1>("h0") @[cpu.scala 228:24]
-    mem_wb.io_valid <= UInt<1>("h1") @[cpu.scala 227:24]
+    mem_wb.io_in_instruction <= ex_mem.io_data_instruction @[cpu.scala 363:28]
+    mem_wb.io_in_readdata <= io_dmem_readdata @[cpu.scala 364:25]
+    mem_wb.io_in_result <= ex_mem.io_data_result @[cpu.scala 365:23]
+    mem_wb.io_in_sextImm <= ex_mem.io_data_sextImm @[cpu.scala 366:24]
+    mem_wb.io_flush <= UInt<1>("h0") @[cpu.scala 374:24]
+    mem_wb.io_valid <= UInt<1>("h1") @[cpu.scala 373:24]
     mem_wb_ctrl.clock <= clock
     mem_wb_ctrl.reset <= reset
-    mem_wb_ctrl.io_flush <= UInt<1>("h0") @[cpu.scala 230:24]
-    mem_wb_ctrl.io_valid <= UInt<1>("h1") @[cpu.scala 229:24]
+    mem_wb_ctrl.io_in_wb_ctrl_writeback_valid <= ex_mem_ctrl.io_data_wb_ctrl_writeback_valid @[cpu.scala 369:45]
+    mem_wb_ctrl.io_in_wb_ctrl_writeback_src <= ex_mem_ctrl.io_data_wb_ctrl_writeback_src @[cpu.scala 370:43]
+    mem_wb_ctrl.io_flush <= UInt<1>("h0") @[cpu.scala 376:24]
+    mem_wb_ctrl.io_valid <= UInt<1>("h1") @[cpu.scala 375:24]
 
   module DualPortedCombinMemory :
     input clock : Clock

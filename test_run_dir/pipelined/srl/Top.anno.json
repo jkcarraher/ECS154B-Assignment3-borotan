@@ -139,10 +139,6 @@
     }
   },
   {
-    "class":"firrtl.transforms.DontTouchAnnotation",
-    "target":"~Top|PipelinedCPU>pc"
-  },
-  {
     "class":"firrtl.options.OutputAnnotationFileAnnotation",
     "file":"Top"
   },

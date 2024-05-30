@@ -390,6 +390,9 @@ class PipelinedCPU(implicit val conf: CPUConfig) extends BaseCPU {
     registers.io.wen := mem_wb_ctrl.io.data.wb_ctrl.writeback_valid
   }
 
+  // Initialize writedata_mux with a default value
+  writedata_mux := mem_wb.io.data.instruction(11,7)
+
   // Write the data to the register file
   when (mem_wb_ctrl.io.data.wb_ctrl.writeback_src === 0.U) {
     writedata_mux := mem_wb.io.data.result
