@@ -1,0 +1,21 @@
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationsTesterLab3:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mPipelined CPU[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run application fibonacci *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:105)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run application naturalsum *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:105)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run application multiplier *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:105)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run application divider *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  treadle.executable.StopException: Failure Stop: result 1[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at treadle.executable.ExecutionEngine.runAssigns(ExecutionEngine.scala:166)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at treadle.executable.ExecutionEngine.evaluateCircuit(ExecutionEngine.scala:347)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at treadle.executable.SimpleSingleClockStepper.raiseClock$1(ClockStepper.scala:112)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at treadle.executable.SimpleSingleClockStepper.$anonfun$run$2(ClockStepper.scala:152)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at scala.collection.immutable.Range.foreach$mVc$sp(Range.scala:158)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at treadle.executable.SimpleSingleClockStepper.run(ClockStepper.scala:128)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at treadle.TreadleTester.step(TreadleTester.scala:320)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at dinocpu.test.CPUTesterDriver.run(CPUTesterDriver.scala:256)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at dinocpu.test.CPUTesterDriver$.apply(CPUTesterDriver.scala:287)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at dinocpu.ApplicationsTesterLab3.$anonfun$new$20(Lab3Test.scala:105)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  ...[0m[0m

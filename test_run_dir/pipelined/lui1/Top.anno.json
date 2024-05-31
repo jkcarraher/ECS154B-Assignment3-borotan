@@ -1,23 +1,133 @@
 [
   {
-    "class":"firrtl.options.OutputAnnotationFileAnnotation",
-    "file":"Top"
-  },
-  {
-    "class":"chisel3.stage.phases.DriverCompatibility$RunFirrtlCompilerAnnotation$"
-  },
-  {
-    "class":"firrtl.transforms.DontTouchAnnotation",
-    "target":"~Top|PipelinedCPU>io"
-  },
-  {
-    "class":"firrtl.transforms.DontTouchAnnotation",
-    "target":"~Top|RegisterFile>io"
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"Top.DCombinMemPort.io_bus_request_bits_operation",
+    "enumTypeName":"dinocpu.memory.MemoryOperation"
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"Top.DualPortedCombinMemory.io.dmem.request.bits.operation",
+    "target":"Top.ICombinMemPort._T_1_operation",
     "enumTypeName":"dinocpu.memory.MemoryOperation"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"Top.ICombinMemPort.io_bus_request_bits_operation",
+    "enumTypeName":"dinocpu.memory.MemoryOperation"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"Top.DualPortedCombinMemory.io_imem_request_bits_operation",
+    "enumTypeName":"dinocpu.memory.MemoryOperation"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"Top.DualPortedCombinMemory.io_dmem_request_bits_operation",
+    "enumTypeName":"dinocpu.memory.MemoryOperation"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|RegisterFile>io_readreg1"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|RegisterFile>io_readreg2"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|RegisterFile>io_writereg"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|RegisterFile>io_writedata"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|RegisterFile>io_wen"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|RegisterFile>io_readdata1"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|RegisterFile>io_readdata2"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_imem_address"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_imem_valid"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_imem_good"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_imem_instruction"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_imem_ready"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_dmem_address"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_dmem_valid"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_dmem_good"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_dmem_writedata"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_dmem_memread"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_dmem_memwrite"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_dmem_maskmode"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_dmem_sext"
+  },
+  {
+    "class":"firrtl.transforms.DontTouchAnnotation",
+    "target":"~Top|PipelinedCPU>io_dmem_readdata"
+  },
+  {
+    "class":"logger.LogLevelAnnotation",
+    "globalLogLevel":{
+      
+    }
+  },
+  {
+    "class":"firrtl.options.TargetDirAnnotation",
+    "directory":"test_run_dir/pipelined/lui1"
+  },
+  {
+    "class":"firrtl.EmitCircuitAnnotation",
+    "emitter":"firrtl.LowFirrtlEmitter"
+  },
+  {
+    "class":"firrtl.annotations.LoadMemoryAnnotation",
+    "target":"Top.DualPortedCombinMemory.memory",
+    "fileName":"test_run_dir/pipelined/lui1/lui1.hex",
+    "hexOrBinary":"h",
+    "originalMemoryNameOpt":"memory"
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
@@ -29,44 +139,11 @@
     }
   },
   {
-    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"Top.DualPortedCombinMemory.io.imem.request.bits.operation",
-    "enumTypeName":"dinocpu.memory.MemoryOperation"
+    "class":"firrtl.options.OutputAnnotationFileAnnotation",
+    "file":"Top"
   },
   {
-    "class":"firrtl.annotations.LoadMemoryAnnotation",
-    "target":"Top.DualPortedCombinMemory.memory",
-    "fileName":"test_run_dir/pipelined/lui1/lui1.hex",
-    "hexOrBinary":"h",
-    "originalMemoryNameOpt":"memory"
-  },
-  {
-    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"Top.ICombinMemPort.io.bus.request.bits.operation",
-    "enumTypeName":"dinocpu.memory.MemoryOperation"
-  },
-  {
-    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"Top.ICombinMemPort._T_1.operation",
-    "enumTypeName":"dinocpu.memory.MemoryOperation"
-  },
-  {
-    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
-    "target":"Top.DCombinMemPort.io.bus.request.bits.operation",
-    "enumTypeName":"dinocpu.memory.MemoryOperation"
-  },
-  {
-    "class":"firrtl.stage.RunFirrtlTransformAnnotation",
-    "transform":"chisel3.util.experimental.LoadMemoryTransform"
-  },
-  {
-    "class":"firrtl.options.TargetDirAnnotation",
-    "directory":"test_run_dir/pipelined/lui1"
-  },
-  {
-    "class":"logger.LogLevelAnnotation",
-    "globalLogLevel":{
-      
-    }
+    "class":"firrtl.transforms.BlackBoxTargetDirAnno",
+    "targetDir":"test_run_dir/pipelined/lui1"
   }
 ]

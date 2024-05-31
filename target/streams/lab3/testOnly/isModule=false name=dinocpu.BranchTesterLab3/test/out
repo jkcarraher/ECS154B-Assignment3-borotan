@@ -1,0 +1,30 @@
+[0m[[0m[0minfo[0m] [0m[0m[32mBranchTesterLab3:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mPipelined CPU[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run branch instruction beq-False *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:78)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run branch instruction beq-True *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:78)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run branch instruction bne-False[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run branch instruction bne-True *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:78)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run branch instruction blt-False[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run branch instruction blt-False-equal[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run branch instruction blt-True *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:78)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run branch instruction blt-False-signed[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run branch instruction blt-True-signed *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:78)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run branch instruction bge-False[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run branch instruction bge-True *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:78)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run branch instruction bge-False-signed[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run branch instruction bge-True-signed *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:78)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run branch instruction bge-True-equal *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:78)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run branch instruction bltu-False[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run branch instruction bltu-True *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:78)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run branch instruction bgeu-False[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- should run branch instruction bgeu-True *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:78)[0m[0m
