@@ -1,8 +1,9 @@
 #Successful Tests
-#Thu May 30 17:04:02 GMT 2024
+#Sat Jun 01 01:01:15 GMT 2024
 dinocpu.JumpTesterLab3=1683061187555
 dinocpu.RTypeMultiCycleTesterLab3=1683061190963
 dinocpu.ApplicationsTesterLab3=1683061188729
 dinocpu.RTypeTesterLab3=1717088613348
 dinocpu.MemoryMultiCycleTesterLab3=1683061188474
 dinocpu.BranchTesterLab3=1683061197635
+dinocpu.MemoryTesterLab3=1717203675651

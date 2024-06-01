@@ -8,3 +8,73 @@ Lab3 / testOnly dinocpu.UTypeTesterLab3
 Lab3 / testOnly dinocpu.MemoryTesterLab3
  Lab3 / testOnly dinocpu.RTypeTesterLab3
 Lab3 / testOnly dinocpu.ITypeTesterLab3
+Lab3 / testOnly dinocpu.MemoryMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.ApplicationsTesterLab3
+clear
+print inst
+clear
+exit
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+ Lab3 / testOnly dinocpu.RTypeTesterLab3
+ Lab3 / testOnly dinocpu.ITypeTesterLab3
+ Lab3 / testOnly dinocpu.RTypeTesterLab3
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+ Lab3 / testOnly dinocpu.RTypeTesterLab3
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+Lab3 / testOnly dinocpu.UTypeTesterLab3
+Lab3 / testOnly dinocpu.MemoryTesterLab3
+Lab3 / testOnly dinocpu.ITypeMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.RTypeMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+Lab3 / testOnly dinocpu.RTypeMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.BranchTesterLab3
+Lab3 / testOnly dinocpu.JumpTesterLab3
+Lab3 / testOnly dinocpu.MemoryMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.ApplicationsTesterLab3
+Lab3 / testOnly dinocpu.RTypeMultiCycleTesterLab3
+clear
+Lab3 / testOnly dinocpu.RTypeMultiCycleTesterLab3
+sbt:dinocpu> Lab3 / testOnly dinocpu.ITypeTesterLab3
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+clear
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+Lab3 / testOnly dinocpu.RTypeTesterLab3
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+Lab3 / testOnly dinocpu.RTypeTesterLab3
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+Lab3 / testOnly dinocpu.RTypeTesterLab3
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+Lab3 / testOnly dinocpu.RTypeTesterLab3
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+Lab3 / testOnly dinocpu.RTypeTesterLab3
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+Lab3 / testOnly dinocpu.UTypeTesterLab3
+Lab3 / testOnly dinocpu.MemoryTesterLab3
+Lab3 / testOnly dinocpu.ITypeMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.RTypeMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.BranchTesterLab3
+Lab3 / testOnly dinocpu.MemoryMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.MemoryTesterLab3
+runMain dinocpu.singlestep sw pipelined
+Lab3 / testOnly dinocpu.MemoryTesterLab3
+Lab3 / testOnly dinocpu.ITypeMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.RTypeMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.BranchTesterLab3
+Lab3 / testOnly dinocpu.JumpTesterLab3
+Lab3 / testOnly dinocpu.MemoryMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.ApplicationsTesterLab3
+runMain dinocpu.singlestep sd2 pipelined
+clear
+runMain dinocpu.singlestep sd2 pipelined
+Lab3 / testOnly dinocpu.MemoryTesterLab3
+Lab3 / testOnly dinocpu.RTypeTesterLab3
+Lab3 / testOnly dinocpu.ITypeMultiCycleTesterLab3
+Lab3 / testOnly dinocpu.ITypeTesterLab3
+Lab3 / testOnly dinocpu.UTypeTesterLab3
+Lab3 / testOnly dinocpu.MemoryTesterLab3
+Lab3 / testOnly dinocpu.UTypeTesterLab3
+Lab3 / testOnly dinocpu.MemoryTesterLab3
+runMain dinocpu.singlestep sd2 pipelined
+clear
+runMain dinocpu.singlestep sd2 pipelined
+Lab3 / testOnly dinocpu.MemoryTesterLab3
