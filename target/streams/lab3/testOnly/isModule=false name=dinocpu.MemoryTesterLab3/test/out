@@ -11,13 +11,9 @@
 [0m[[0m[0minfo[0m] [0m[0m[32m- should run memory-type instruction lwu1[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should run memory-type instruction ld1[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should run memory-type instruction ld2[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m- should run memory-type instruction sw *** FAILED ***[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:51)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run memory-type instruction sw[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should run memory-type instruction sw2[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m- should run memory-type instruction sb *** FAILED ***[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:51)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m- should run memory-type instruction sh *** FAILED ***[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:51)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run memory-type instruction sb[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run memory-type instruction sh[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should run memory-type instruction sd1[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m- should run memory-type instruction sd2 *** FAILED ***[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  false was not true (Lab3Test.scala:51)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should run memory-type instruction sd2[0m[0m
